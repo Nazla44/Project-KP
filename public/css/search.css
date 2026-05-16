@@ -1,0 +1,801 @@
+/* =============================================================================
+   SEARCH — Navbar Live Dropdown + Halaman Hasil Pencarian
+   Tambahkan ke: public/css/main.css (paling bawah)
+   ============================================================================= */
+
+/* ══════════════════════════════════════════════════════════════════
+   NAVBAR SEARCH BOX & LIVE DROPDOWN
+   prefix: sb-
+══════════════════════════════════════════════════════════════════ */
+
+.sb-wrap {
+  width: 232px;
+  transition: width 0.3s ease;
+}
+
+.sb-wrap.sb-active {
+  width: 320px;
+  z-index: 1100;
+}
+
+/* Override .search-box saat aktif */
+.sb-wrap.sb-active .search-box {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(213,0,0,0.10);
+}
+
+/* ── Dropdown container ──────────────────────────────────────────── */
+.sb-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+  overflow: hidden;
+  z-index: 1050;
+  /* Animate in */
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.sb-dropdown:not([hidden]) {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ── Loading ─────────────────────────────────────────────────────── */
+.sb-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.sb-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #eee;
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: sb-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes sb-spin { to { transform: rotate(360deg); } }
+
+/* ── Empty state ─────────────────────────────────────────────────── */
+.sb-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.sb-empty-icon {
+  font-size: 28px;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.sb-empty-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 4px;
+}
+
+.sb-empty-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Results list ────────────────────────────────────────────────── */
+.sb-results {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  max-height: 360px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #eee transparent;
+}
+
+.sb-results::-webkit-scrollbar { width: 4px; }
+.sb-results::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+/* ── Single result item ──────────────────────────────────────────── */
+.sb-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.sb-item:hover { background: #fafafa; }
+.sb-item.sb-item--active { background: rgba(213,0,0,0.04); }
+
+.sb-item-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.sb-item-icon--klinik { background: rgba(213,0,0,0.09); color: var(--color-primary); }
+.sb-item-icon--mitra  { background: rgba(20,100,200,0.09); color: #1464c8; }
+
+.sb-item-body { flex: 1; min-width: 0; }
+
+.sb-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sb-item-name mark {
+  background: rgba(213,0,0,0.12);
+  color: var(--color-primary);
+  border-radius: 3px;
+  padding: 0 2px;
+  font-weight: 700;
+}
+
+.sb-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+
+.sb-item-loc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sb-item-type {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.sb-item-type--klinik { background: rgba(213,0,0,0.08); color: var(--color-primary); }
+.sb-item-type--mitra  { background: rgba(20,100,200,0.08); color: #1464c8; }
+
+.sb-item-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.sb-item-status--open   { background: rgba(22,163,74,0.1);  color: #16a34a; }
+.sb-item-status--closed { background: rgba(220,38,38,0.1);  color: #dc2626; }
+
+.sb-item-services {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.sb-svc {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.sb-item-arrow {
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 4px;
+  flex-shrink: 0;
+  transition: transform 0.15s, color 0.15s;
+}
+
+.sb-item:hover .sb-item-arrow {
+  transform: translateX(3px);
+  color: var(--color-primary);
+}
+
+/* ── Group label ─────────────────────────────────────────────────── */
+.sb-group-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 8px 16px 4px;
+}
+
+.sb-divider {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 4px 0;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+.sb-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 0;
+}
+
+.sb-see-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.sb-see-all:hover {
+  background: rgba(213,0,0,0.04);
+  color: var(--color-primary);
+}
+
+/* ── Keyboard hint ───────────────────────────────────────────────── */
+.sb-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: monospace;
+  color: #888;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   HALAMAN HASIL PENCARIAN
+   prefix: sr-
+══════════════════════════════════════════════════════════════════ */
+
+/* ── Hero header ─────────────────────────────────────────────────── */
+.sr-hero {
+  background: #fafafa;
+  border-bottom: 1px solid var(--color-border);
+  padding: 40px 0 32px;
+}
+
+.sr-hero-inner { max-width: 800px; }
+
+.sr-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+}
+
+.sr-breadcrumb a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+.sr-breadcrumb a:hover { color: var(--color-primary); }
+.sr-breadcrumb .bi { font-size: 10px; }
+
+.sr-title {
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--color-text);
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.sr-title-query {
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.sr-subtitle {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+}
+
+/* ── Search form on results page ─────────────────────────────────── */
+.sr-form { max-width: 700px; }
+
+.sr-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-pill);
+  padding: 6px 6px 6px 18px;
+  gap: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 14px;
+}
+
+.sr-input-wrap:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(213,0,0,0.09);
+}
+
+.sr-input-icon { font-size: 16px; color: #bbb; flex-shrink: 0; }
+
+.sr-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 300;
+  color: var(--color-text);
+  background: transparent;
+}
+
+.sr-input::placeholder { color: #bbb; }
+
+.sr-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-pill);
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.sr-submit:hover { background: var(--color-primary-hover); transform: translateY(-1px); }
+
+/* Filter chips */
+.sr-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.sr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border);
+  background: #fff;
+  border-radius: var(--border-radius-pill);
+  padding: 7px 16px;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.sr-chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.sr-chip.active {
+  background: rgba(213,0,0,0.07);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ── Body / Results area ─────────────────────────────────────────── */
+.sr-body { padding: 48px 40px 80px; }
+
+/* ── Section header ──────────────────────────────────────────────── */
+.sr-section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sr-section-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(213,0,0,0.09);
+  color: var(--color-primary);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.sr-section-icon--mitra {
+  background: rgba(20,100,200,0.09);
+  color: #1464c8;
+}
+
+.sr-section-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.sr-section-count {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 2px 0 0;
+}
+
+/* ── Klinik card ─────────────────────────────────────────────────── */
+.sr-klinik-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sr-klinik-card {
+  background: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-card);
+  padding: 22px 24px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.sr-klinik-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 28px rgba(213,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.sr-klinik-top {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.sr-klinik-icon-wrap {
+  width: 44px;
+  height: 44px;
+  background: rgba(213,0,0,0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.sr-klinik-info { flex: 1; min-width: 0; }
+
+.sr-klinik-tipe {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.sr-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.sr-status--open   { background: rgba(22,163,74,0.1);  color: #16a34a; }
+.sr-status--closed { background: rgba(220,38,38,0.1);  color: #dc2626; }
+
+.sr-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sr-status--open   .sr-status-dot { background: #16a34a; }
+.sr-status--closed .sr-status-dot { background: #dc2626; }
+
+.sr-klinik-nama {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 6px 0 4px;
+  line-height: 1.3;
+}
+
+.sr-klinik-alamat {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sr-klinik-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.sr-klinik-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.sr-klinik-meta-item a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sr-klinik-meta-item .bi { font-size: 13px; }
+
+.sr-klinik-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sr-layanan-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.sr-layanan-tag {
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(213,0,0,0.07);
+  color: var(--color-primary);
+  border-radius: 6px;
+  padding: 3px 10px;
+}
+
+.sr-klinik-actions { display: flex; gap: 8px; }
+
+.sr-btn-call,
+.sr-btn-maps,
+.sr-btn-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.sr-btn-call   { background: var(--color-primary); color: #fff; }
+.sr-btn-maps   { background: #f1f3f4; color: var(--color-text); }
+.sr-btn-detail { background: var(--color-primary-light); color: var(--color-primary); }
+
+.sr-btn-call:hover,
+.sr-btn-maps:hover,
+.sr-btn-detail:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* ── Mitra card ──────────────────────────────────────────────────── */
+.sr-mitra-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-card);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.sr-mitra-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+  transform: translateY(-3px);
+}
+
+.sr-mitra-logo {
+  height: 40px;
+  width: auto;
+  max-width: 110px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: all 0.25s;
+}
+
+.sr-mitra-card:hover .sr-mitra-logo { filter: grayscale(0%); opacity: 1; }
+
+.sr-mitra-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────── */
+.sr-empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.sr-empty-icon-wrap {
+  width: 72px;
+  height: 72px;
+  background: rgba(213,0,0,0.07);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: var(--color-primary);
+  margin: 0 auto 20px;
+}
+
+.sr-empty-icon-wrap--notfound {
+  background: #f5f5f5;
+  color: #bbb;
+}
+
+.sr-empty-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 10px;
+}
+
+.sr-empty-desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.sr-suggestions { text-align: center; }
+
+.sr-sugg-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+}
+
+.sr-sugg-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+.sr-sugg-chip {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary);
+  background: rgba(213,0,0,0.07);
+  border: 1px solid rgba(213,0,0,0.15);
+  border-radius: var(--border-radius-pill);
+  padding: 6px 16px;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.sr-sugg-chip:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────── */
+.sr-sidebar { position: sticky; top: 90px; }
+
+.sr-sidebar-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-card);
+  padding: 24px;
+}
+
+.sr-sidebar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 10px;
+}
+
+.sr-sidebar-desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.sr-btn-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-primary);
+  border: 1.5px solid rgba(213,0,0,0.3);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-pill);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.sr-btn-contact:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 991.98px) {
+  .sb-wrap.sb-active { width: 280px; }
+  .sr-sidebar { position: static; }
+  .sr-body { padding: 32px 20px 60px; }
+}
+
+@media (max-width: 767.98px) {
+  .sb-dropdown { left: auto; right: 0; width: 320px; }
+  .sr-title { font-size: 26px; }
+  .sr-klinik-footer { flex-direction: column; align-items: flex-start; }
+  .sr-klinik-actions { width: 100%; justify-content: flex-start; }
+}
+
+@media (max-width: 575.98px) {
+  .sb-wrap { width: 180px; }
+  .sb-wrap.sb-active { width: 240px; }
+  .sr-hero { padding: 28px 0 24px; }
+  .sr-title { font-size: 22px; }
+  .sr-submit span { display: none; }
+}
