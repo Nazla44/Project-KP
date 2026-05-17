@@ -23,7 +23,7 @@ class StpiData
                 'children' => [
                     ['label' => 'Program Komunitas', 'href' => '/program-komunitas'],
                     ['label' => 'Program Klinik', 'href' => route('program-klinik')],
-                    ['label' => 'Program Advokasi', 'href' => '#'],
+                    //['label' => 'Program Advokasi', 'href' => '#'],
                 ],
             ],
             [
