@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'Daftar Jadi Kader – Stop TB Partnership Indonesia')
 
