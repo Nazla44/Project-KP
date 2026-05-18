@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artikel;
 use App\Support\StpiData;
 use Illuminate\Http\Request;
 
@@ -152,7 +153,7 @@ class PageController extends Controller
 
     public function berita(Request $request)
     {
-        $all = StpiData::allArtikel();
+        $all = $this->allPublishedArticles();
         return view('pages.berita', [
             'pageTitle' => 'Berita & Kegiatan',
             'beritaPage' => $this->paginateArray($all, $request, 6, 'page'),
@@ -161,10 +162,10 @@ class PageController extends Controller
 
     public function beritaDetail(string $slug)
     {
-        $article = collect(StpiData::allArtikel())->firstWhere('slug', $slug);
+        $article = collect($this->allPublishedArticles())->firstWhere('slug', $slug);
         if (!$article)
             abort(404);
-        $related = collect(StpiData::allArtikel())
+        $related = collect($this->allPublishedArticles())
             ->whereIn('slug', $article['related'] ?? [])
             ->values()->toArray();
         return view('pages.berita-detail', [
@@ -176,7 +177,7 @@ class PageController extends Controller
 
     public function artikelDetail(string $slug)
     {
-        $semua = StpiData::allArtikel();
+        $semua = $this->allPublishedArticles();
 
         $artikel = collect($semua)->firstWhere('slug', $slug);
 
@@ -381,5 +382,18 @@ class PageController extends Controller
             'totalPages' => $totalPages,
             'param' => $param,
         ];
+    }
+
+    private function allPublishedArticles(): array
+    {
+        $databaseArticles = Artikel::query()
+            ->where('status', 'tayang')
+            ->whereNotNull('slug')
+            ->latest('tanggal')
+            ->get()
+            ->map(fn (Artikel $artikel) => $artikel->toPublicArticleArray())
+            ->all();
+
+        return array_values(array_merge($databaseArticles, StpiData::allArtikel()));
     }
 }

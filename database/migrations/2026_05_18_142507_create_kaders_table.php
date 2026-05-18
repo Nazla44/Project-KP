@@ -13,9 +13,7 @@ return new class extends Migration {
         Schema::create('kaders', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->foreignId('klinik_id')
-                ->constrained('klinik')
-                ->onDelete('cascade');
+            $table->foreignId('klinik_id');
             $table->string('hp');
             $table->date('tgl_bergabung');
             $table->enum('status', ['aktif', 'verifikasi'])->default('verifikasi');

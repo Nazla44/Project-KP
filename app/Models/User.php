@@ -13,6 +13,9 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public const ROLE_SUPER_ADMIN = 'super_admin';
+    public const ROLE_KADER = 'kader';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,7 +24,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'password',
+        'role',
+        'is_active',
     ];
 
     /**
@@ -43,7 +49,27 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
             'password' => 'hashed',
         ];
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
+    }
+
+    public function isKader(): bool
+    {
+        return $this->role === self::ROLE_KADER;
+    }
+
+    public function roleLabel(): string
+    {
+        return match ($this->role) {
+            self::ROLE_SUPER_ADMIN => 'Super Admin',
+            self::ROLE_KADER => 'Kader',
+            default => ucfirst(str_replace('_', ' ', (string) $this->role)),
+        };
     }
 }

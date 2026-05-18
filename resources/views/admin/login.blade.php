@@ -1,133 +1,212 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.blank')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&display=swap" rel="stylesheet">
-
+@push('styles')
     <style>
-        :root {
-            --color-primary: #d50000;
-            --color-primary-hover: #d50000;
-            --color-primary-light: rgba(213, 0, 0, 0.07);
-            --color-text: rgba(24, 24, 24, 1);
-            --color-text-muted: rgba(127, 127, 127, 1);
-            --color-text-light: rgba(103, 103, 103, 1);
-            --color-white: rgba(255, 255, 255, 1);
-            --color-bg: #ffffff;
-            --color-bg-soft: #fcfcfc;
-            --color-border: #e5e5e5;
-            --color-shadow: rgba(231, 231, 231, 1);
-            --font-main: 'Figtree', sans-serif;
-            --border-radius-pill: 50px;
-            --border-radius-card: 16px;
-            --border-radius-lg: 24px;
-            --transition-base: 0.2s ease;
-            --transition-slow: 0.4s ease;
-        }
-
-        * {
-            box-sizing: border-box;
+        body {
             font-family: var(--font-main);
         }
 
-        body {
-            margin: 0;
-            background-color: var(--color-bg-soft);
+        .login-page {
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-stack {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .brand-wrap {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .brand-logo {
+            width: 132px;
+            max-width: 100%;
+            display: inline-block;
         }
 
         .login-card {
-            background-color: var(--color-white);
-            padding: 40px 30px;
-            border-radius: var(--border-radius-card);
-            box-shadow: 0 4px 12px var(--color-shadow);
-            width: 100%;
-            max-width: 400px;
+            background: var(--color-white);
+            border: 0;
+            border-radius: 20px;
+            box-shadow: 0 22px 50px rgba(15, 23, 42, 0.10);
+            padding: 30px 26px 26px;
+        }
+
+        .login-title {
+            margin: 0 0 6px;
             text-align: center;
-        }
-
-        .login-card h1 {
-            margin-bottom: 24px;
+            font-size: 1.75rem;
+            font-weight: 700;
             color: var(--color-text);
-            font-size: 28px;
-            font-weight: 600;
         }
 
-        .login-card form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .login-subtitle {
+            margin: 0 0 22px;
+            text-align: center;
+            color: var(--color-text-light);
+            font-size: 0.95rem;
         }
 
-        .login-card input[type="email"],
-        .login-card input[type="password"] {
-            padding: 12px 16px;
-            border-radius: var(--border-radius-pill);
-            border: 1px solid var(--color-border);
-            font-size: 16px;
-            color: var(--color-text);
-            transition: border var(--transition-base);
-        }
-
-        .login-card input[type="email"]:focus,
-        .login-card input[type="password"]:focus {
-            border-color: var(--color-primary);
-            outline: none;
-        }
-
-        .login-card button {
-            padding: 12px 16px;
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            border: none;
-            border-radius: var(--border-radius-pill);
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color var(--transition-base);
-        }
-
-        .login-card button:hover {
-            background-color: var(--color-primary-hover);
-        }
-
-        .login-card .error-message {
+        .alert-simple {
+            border: 0;
+            border-radius: 14px;
+            background: var(--color-primary-light);
             color: var(--color-primary);
-            font-size: 14px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            font-size: 0.95rem;
         }
 
-        @media (max-width: 480px) {
+        .form-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .form-label {
+            margin-bottom: 0;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: var(--color-text-light);
+        }
+
+        .form-control {
+            height: 50px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            padding: 0 16px;
+            font-size: 0.96rem;
+            color: var(--color-text);
+            box-shadow: none;
+        }
+
+        .form-control::placeholder {
+            color: #9aa7b5;
+        }
+
+        .form-control:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 0.18rem var(--color-primary-light);
+        }
+
+        .btn-login {
+            height: 48px;
+            border: 0;
+            border-radius: 14px;
+            background: var(--color-primary);
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-white);
+            box-shadow: none;
+        }
+
+        .btn-login:hover,
+        .btn-login:focus {
+            background: var(--color-primary-hover);
+            color: var(--color-white);
+        }
+
+        .remember-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .remember-wrap .form-check-input {
+            width: 18px;
+            height: 18px;
+            margin-top: 0;
+            border-color: var(--color-border);
+        }
+
+        .remember-wrap .form-check-input:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .remember-wrap .form-check-input:focus {
+            box-shadow: 0 0 0 0.18rem var(--color-primary-light);
+        }
+
+        .remember-wrap .form-check-label {
+            color: var(--color-text-light);
+            font-size: 0.94rem;
+        }
+
+        .login-note {
+            margin-top: 18px;
+            text-align: center;
+            color: var(--color-text-light);
+            font-size: 0.92rem;
+        }
+
+        @media (max-width: 575.98px) {
+            .brand-wrap {
+                margin-bottom: 26px;
+            }
+
             .login-card {
-                padding: 30px 20px;
+                padding: 26px 20px 22px;
+                border-radius: 18px;
+            }
+
+            .login-title {
+                font-size: 1.55rem;
             }
         }
     </style>
-</head>
+@endpush
 
-<body>
-    <div class="login-card">
-        <h1>Admin Login</h1>
-
-        @if ($errors->any())
-            <div class="error-message">
-                {{ $errors->first() }}
+@section('content')
+    <main class="login-page">
+        <div class="login-stack">
+            <div class="brand-wrap">
+                <img src="{{ asset('assets/image/image.png') }}" alt="Stop TB Partnership Indonesia" class="brand-logo">
             </div>
-        @endif
 
-        <form method="POST" action="{{ route('admin.login.submit') }}">
-            @csrf
-            <input type="email" name="email" placeholder="Email" required value="{{ old('email') }}">
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-    </div>
-</body>
+            <section class="login-card">
+                <h1 class="login-title">Selamat Datang</h1>
+                <p class="login-subtitle">Mohon masukkan detail Anda untuk masuk</p>
 
-</html>
+                @if ($errors->any())
+                    <div class="alert-simple">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+
+                <form class="mb-4" method="POST" action="{{ route('admin.login.submit') }}">
+                    @csrf
+
+                    <div class="mb-4">
+                        <label for="email" class="form-label mb-2">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}"
+                            placeholder="name@example.com" required autofocus>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label mb-2">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Enter your password" required>
+                    </div>
+
+                    <div class="form-check remember-wrap">
+                        <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">
+                            Ingat saya
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-login w-100">Masuk ke Dashboard</button>
+                </form>
+            </section>
+        </div>
+    </main>
+@endsection

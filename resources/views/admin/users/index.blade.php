@@ -505,7 +505,7 @@
                     @foreach ($users as $user)
                         @php
                             $roleLabel = str_replace('_', ' ', $user->role);
-                            $roleText = $user->isSuperAdmin() ? 'Super Admin' : 'Kader';
+                            $roleText = $user->roleLabel();
                             $statusText = $user->is_active ? 'Aktif' : 'Nonaktif';
                             $initial = strtoupper(substr($user->name, 0, 1));
                         @endphp

@@ -9,7 +9,7 @@
         <div class="admin-topbar-user">
             <div class="admin-topbar-user-text">
                 <strong>{{ auth()->user()->name }}</strong>
-                <span>{{ str_replace('_', ' ', auth()->user()->role) }}</span>
+                <span>{{ auth()->user()->roleLabel() }}</span>
             </div>
 
             <span class="admin-topbar-avatar">

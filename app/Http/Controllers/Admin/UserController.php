@@ -83,7 +83,10 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')->with('status', 'Akun yang sedang digunakan tidak dapat dihapus.');
         }
 
-        $user->tokens()->delete();
+        if (method_exists($user, 'tokens')) {
+            $user->tokens()->delete();
+        }
+
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('status', 'User berhasil dihapus.');

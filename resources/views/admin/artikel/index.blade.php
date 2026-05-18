@@ -1,50 +1,124 @@
-@extends('admin.layouts.master')
+@extends('layouts.admin')
+
+@push('styles')
+    <style>
+        .article-cover-thumb {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+        }
+    </style>
+@endpush
 
 @section('content')
-    <h2 class="text-xl font-bold mb-4">Manajemen Artikel</h2>
-    <a href="{{ route('artikel.create') }}" class="bg-green-600 text-white px-4 py-2 rounded mb-4 inline-block">Tambah
-        Artikel</a>
-    <table class="w-full table-auto bg-white shadow rounded">
-        <thead class="bg-gray-100">
-            <tr>
-                <th class="px-4 py-2">Judul</th>
-                <th class="px-4 py-2">Kategori</th>
-                <th class="px-4 py-2">Penulis</th>
-                <th class="px-4 py-2">Tanggal</th>
-                <th class="px-4 py-2">Status</th>
-                <th class="px-4 py-2">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($artikel as $a)
-                <tr>
-                    <td class="border px-4 py-2">{{ $a->judul }}</td>
-                    <td class="border px-4 py-2">{{ $a->kategori }}</td>
-                    <td class="border px-4 py-2">{{ $a->penulis }}</td>
-                    <td class="border px-4 py-2">{{ $a->tanggal }}</td>
-                    <td class="border px-4 py-2">
-                        @if($a->status == 'tayang')
-                            <span class="text-green-600 font-bold">Tayang</span>
-                        @else
-                            <span class="text-yellow-500 font-bold">Draft</span>
-                        @endif
-                    </td>
-                    <td class="border px-4 py-2">
-                        @if($a->status != 'tayang')
-                            <form method="POST" action="{{ route('artikel.publish', $a->id) }}" class="inline">
-                                @csrf
-                                <button class="bg-blue-500 text-white px-2 py-1 rounded">Publish</button>
-                            </form>
-                        @endif
-                        <a href="{{ route('artikel.edit', $a->id) }}" class="bg-gray-500 text-white px-2 py-1 rounded">Edit</a>
-                        <form method="POST" action="{{ route('artikel.destroy', $a->id) }}" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="bg-red-600 text-white px-2 py-1 rounded">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <section class="users-page-header">
+        <div class="users-page-title">
+            <span>Konten</span>
+            <h1>{{ $pageTitle }}</h1>
+            <p>Kelola artikel yang akan tampil pada halaman berita untuk pengunjung website.</p>
+        </div>
+
+        <a href="{{ route('admin.articles.create') }}" class="btn btn-danger users-create-button">
+            <i class="bi bi-plus-circle"></i>
+            <span>Tambah Artikel</span>
+        </a>
+    </section>
+
+    @if (session('status'))
+        <div class="alert users-alert users-alert-success mb-4">
+            <i class="bi bi-check-circle-fill"></i>
+            <div>{{ session('status') }}</div>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert users-alert users-alert-danger mb-4">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <div>{{ $errors->first() }}</div>
+        </div>
+    @endif
+
+    <section class="users-table-card">
+        <div class="users-table-header">
+            <div>
+                <h2>Daftar Artikel</h2>
+                <p>Gunakan pencarian dan sortir untuk mengelola artikel dengan cepat.</p>
+            </div>
+
+            <div class="users-search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" id="articles-search" class="form-control" placeholder="Cari artikel...">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table users-table align-middle mb-0" id="articles-table">
+                <thead>
+                    <tr>
+                        <th>Cover</th>
+                        <th>Judul</th>
+                        <th>Topik</th>
+                        <th>Penulis</th>
+                        <th>Tanggal</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($articles as $article)
+                        <tr>
+                            <td>
+                                <img src="{{ $article->cover_image_url }}" alt="{{ $article->judul }}" class="article-cover-thumb">
+                            </td>
+                            <td>
+                                <div class="users-profile-cell">
+                                    <div>
+                                        <strong>{{ $article->judul }}</strong>
+                                        <small>{{ $article->slug }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="users-role-pill is-kader">{{ $article->topik }}</span>
+                            </td>
+                            <td>{{ $article->penulis ?: '-' }}</td>
+                            <td class="users-date">{{ optional($article->tanggal)->format('d M Y') }}</td>
+                            <td>
+                                <span class="users-status-pill {{ $article->status === 'tayang' ? 'is-active' : 'is-inactive' }}">
+                                    <span></span>{{ $article->status === 'tayang' ? 'Tayang' : 'Draft' }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="users-actions">
+                                    <a href="{{ route('admin.articles.edit', $article) }}" class="users-icon-button" title="Edit artikel">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    <form method="POST" action="{{ route('admin.articles.destroy', $article) }}"
+                                        onsubmit="return confirm('Hapus artikel ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="users-icon-button users-icon-button-danger" title="Hapus artikel">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </section>
 @endsection
+
+@push('scripts')
+    <script>
+        initAdminDataTable('#articles-table', {
+            actionColumn: 6,
+            searchInput: '#articles-search',
+        });
+    </script>
+@endpush
