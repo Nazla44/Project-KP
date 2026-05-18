@@ -1,0 +1,441 @@
+.pk-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 32px;
+  list-style: none;
+  padding: 0;
+}
+.pk-breadcrumb a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.pk-breadcrumb a:hover { color: var(--color-primary); }
+.pk-breadcrumb .bi {
+  font-size: 10px;
+  margin: 0 2px;
+}
+.pk-breadcrumb span:last-child { color: rgba(255,255,255,0.7); }
+
+/* Pill */
+.pk-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--border-radius-pill);
+  padding: 8px 18px;
+  margin-bottom: 28px;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(8px);
+}
+/* ── GPS Hero Section ── */
+.gps-hero-section {
+  position: relative;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.25) 100%),
+    url('/assets/image/program-klinik-bg.png');
+  background-size: cover;
+  background-position: center right;
+  padding: 68px 0 52px;
+  border-bottom: 1px solid #222;
+  overflow: hidden;
+}
+.gps-hero-section h1 { color: #ffffff; }
+.gps-hero-section h1 span,
+.gps-hero-section .text-red { color: var(--color-primary); }
+.gps-hero-section p { color: rgba(255,255,255,0.85); }
+
+.gps-hero-title {
+  font-size: clamp(40px, 5.5vw, 72px);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.3;
+  margin: 12px 0 14px;
+}
+.gps-hero-title span { color: var(--color-primary); }
+.gps-hero-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,.6);
+  max-width: 480px;
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+.gps-hero-big-icon { font-size: 90px; opacity: .12; flex-shrink: 0; }
+
+/* ── Tombol Aktifkan GPS ── */
+.btn-aktif-gps {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 219, 219, 0.12);
+  border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 50px;
+  padding: 13px 24px;
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s;
+}
+.btn-aktif-gps:hover { background: rgba(255,255,255,.2); }
+
+.gps-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.gps-btn-pulse {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(213,0,0,.5);
+  animation: gpsPulse 1.6s ease-out infinite;
+}
+@keyframes gpsPulse {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* ── Lokasi Aktif Bar ── */
+.lokasi-aktif {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50px;
+  padding: 11px 20px;
+}
+.lokasi-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34,197,94,.3);
+  flex-shrink: 0;
+}
+.lokasi-nama { font-size: 13px; font-weight: 500; color: #fff; }
+.lokasi-sub  { font-size: 11px; color: rgba(255,255,255,.5); }
+
+/* ── Alert Error ── */
+.alert-err {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-left: 3px solid #dc2626;
+  border-radius: 10px;
+  padding: 13px 18px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Peta Leaflet ── */
+.map-wrapper {
+  width: 100%;
+  height: 360px;
+  border-radius: 18px;
+  border: 1px solid var(--color-border);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+#klinikMap {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  z-index: 0 !important;
+}
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+.leaflet-container img,
+.leaflet-tile,
+.leaflet-tile-container img {
+  max-width: none !important;
+  max-height: none !important;
+  width: auto !important;
+  height: auto !important;
+  box-sizing: content-box !important;
+}
+
+/* ── Klinik Card (dipakai di halaman GPS) ── */
+.klinik-card {
+  background: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-card);
+  padding: 18px 20px;
+  transition: border-color .2s, box-shadow .2s;
+  position: relative;
+}
+.klinik-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(213,0,0,.09);
+}
+.klinik-card.nearest {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, rgba(213,0,0,.03), #fff);
+}
+.nearest-pill {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+.klinik-card-body { display: flex; gap: 14px; align-items: flex-start; }
+.rank-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.rank-badge.rank-1 { background: var(--color-primary); color: #fff; }
+.rank-badge.rank-n { background: #f1f3f4; color: #5f6368; }
+.klinik-thumb {
+  width: 50px;
+  height: 50px;
+  background: var(--color-primary-light);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.klinik-card-info { flex: 1; min-width: 0; }
+.klinik-card-nama {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 3px;
+}
+.klinik-card-tipe {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin: 0 0 5px;
+}
+.klinik-card-alamat {
+  font-size: 12px;
+  color: var(--color-text-light);
+  margin: 0 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.klinik-jam-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.jam-text { font-size: 11px; color: var(--color-text-light); }
+.status-buka  { font-size: 11px; font-weight: 600; color: #16a34a; }
+.status-tutup { font-size: 11px; font-weight: 600; color: #dc2626; }
+.layanan-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.layanan-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.klinik-aksi { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-hubungi, .btn-maps {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .2s;
+  text-decoration: none;
+}
+.btn-hubungi:hover, .btn-maps:hover { opacity: .85; text-decoration: none; }
+.btn-hubungi { background: var(--color-primary); color: #fff; }
+.btn-maps    { background: #f1f3f4; color: var(--color-text); }
+
+/* ── Jarak Box ── */
+.jarak-box { text-align: right; flex-shrink: 0; min-width: 50px; }
+.jarak-angka { font-size: 20px; font-weight: 700; line-height: 1; }
+.jarak-angka.dekat { color: var(--color-primary); }
+.jarak-angka.jauh  { color: var(--color-text-muted); }
+.jarak-satuan { font-size: 10px; color: var(--color-text-muted); }
+.jarak-eta    { font-size: 11px; color: var(--color-text-light); margin-top: 3px; }
+
+/* ── Sort Chips ── */
+.sort-chips { display: flex; gap: 8px; margin-bottom: 18px; }
+.sort-chip {
+  border: 1.5px solid var(--color-border);
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+}
+.sort-chip.active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ── Navigasi Maps ── */
+.btn-nav-maps {
+  width: 100%;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-card);
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity .2s;
+  margin-top: 8px;
+}
+.btn-nav-maps:hover { opacity: .9; }
+
+/* ── State Kosong / Loading ── */
+.state-center {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.state-center h4 { font-size: 18px; font-weight: 600; color: var(--color-text); }
+.state-center p  { font-size: 14px; max-width: 360px; }
+
+.spinner-red {
+  width: 38px;
+  height: 38px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Result Header ── */
+.result-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.result-title  { font-size: 16px; font-weight: 600; color: var(--color-text); margin: 0; }
+.result-badge  {
+  font-size: 11px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.klinik-list { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── Empty State ── */
+.empty-klinik {
+  text-align: center;
+  padding: 56px 20px;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  border-radius: 18px;
+  margin-top: 20px;
+}
+.empty-klinik .empty-icon { font-size: 42px; margin-bottom: 12px; }
+.empty-klinik h5 { font-size: 18px; font-weight: 600; color: #181818; margin-bottom: 8px; }
+.empty-klinik p  { font-size: 14px; color: #777; margin: 0; }
+
+/* ── Responsive ── */
+@media (max-width: 991px) {
+  .gps-hero-section { padding: 48px 0 40px; }
+  .gps-hero-title { font-size: 32px; }
+  .gps-hero-big-icon { display: none; }
+}
+@media (max-width: 576px) {
+  .gps-hero-title { font-size: 26px; }
+  .map-wrapper { height: 260px; }
+  .btn-aktif-gps { font-size: 13px; padding: 10px 18px; }
+}
+
+/* ── Override hero untuk halaman klinik ── */
+.pk-hero--klinik .pk-hero-bg,
+.pk-hero-bg--klinik {
+  background-image: url('/assets/image/program-klinik-bg.png') !important;
+}
+
+.pk-hero--klinik .pk-hero-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 5, 5, 0.90) 0%,
+    rgba(30, 5, 5, 0.78) 50%,
+    rgba(15, 10, 10, 0.85) 100%
+  );
+}
+
+/* Override pk-btn-outline-ghost agar pakai class komunitas */
+.pk-btn-outline-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 12px 22px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+.pk-btn-outline-ghost:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.6);
+  color: #fff;
+  text-decoration: none;
+}

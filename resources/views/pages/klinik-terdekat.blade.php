@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="{{ asset('css/klinik-terdekat.css') }}" rel="stylesheet">
 
 @endpush
 
@@ -12,6 +13,13 @@
     {{-- ═══════════════════ HERO GPS ═══════════════════ --}}
     <section class="gps-hero-section">
         <div class="container-xl px-4 px-lg-5">
+         <nav class="pk-breadcrumb">
+            <a href="{{ route('home') }}">Home</a>
+            <i class="bi bi-chevron-right"></i>
+            <a href="{{ route('program-klinik') }}">Program Klinik</a>
+            <i class="bi bi-chevron-right"></i>
+            <span>Klinik TBC Terdekat</span>
+        </nav>
             <div class="d-flex justify-content-between align-items-center gap-4">
                 <div>
                     <h1 class="gps-hero-title">
@@ -330,7 +338,7 @@
                     card.className = `klinik-card ${i === 0 ? 'nearest' : ''} mb-0`;
 
                     card.innerHTML = `
-                                ${i === 0 ? '<div class="nearest-pill">⚡ Terdekat</div>' : ''}
+                                ${i === 0 ? '<div class="nearest-pill">Terdekat</div>' : ''}
 
                                 <div class="klinik-card-body">
                                     <div class="rank-badge ${i === 0 ? 'rank-1' : 'rank-n'}">${i + 1}</div>

@@ -3,7 +3,7 @@
 @section('title', 'Program Klinik – Stop TB Partnership Indonesia')
 
 @push('styles')
-    {{-- Tidak perlu style tambahan, sudah di main.css --}}
+    <link href="{{ asset('css/program-klinik.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -11,6 +11,11 @@
     {{-- ═══════════════════════════════ HERO ═══════════════════════════════ --}}
     <section class="klinik-hero">
         <div class="container-xl px-4 px-lg-5">
+        <nav class="pk-breadcrumb">
+            <a href="{{ route('home') }}">Home</a>
+            <i class="bi bi-chevron-right"></i>
+            <span>Program Klinik</span>
+        </nav>
             <div class="klinik-hero-inner">
                 <div>
                     <span class="section-tag-pill">Program Klinik</span>
@@ -22,23 +27,24 @@
                         Jaringan fasilitas kesehatan mitra Stop TB Partnership Indonesia
                         yang siap melayani diagnosis dan pengobatan tuberkulosis.
                     </p>
-                </div>
+                    
+                    <div class="klinik-stats-box">
+                        <div class="text-center">
+                            <div class="klinik-stat-num">{{ $stats['total'] }}+</div>
+                            <div class="klinik-stat-label">Klinik Mitra</div>
+                        </div>
+                        <div class="klinik-stat-divider"></div>
+                        <div class="text-center">
+                            <div class="klinik-stat-num">{{ $stats['kota'] }}</div>
+                            <div class="klinik-stat-label">Kota / Kab.</div>
+                        </div>
+                        <div class="klinik-stat-divider"></div>
+                        <div class="text-center">
+                            <div class="klinik-stat-num">{{ $stats['provinsi'] }}</div>
+                            <div class="klinik-stat-label">Provinsi</div>
+                        </div>
+                    </div>
 
-                <div class="klinik-stats-box">
-                    <div class="text-center">
-                        <div class="klinik-stat-num">{{ $stats['total'] }}+</div>
-                        <div class="klinik-stat-label">Klinik Mitra</div>
-                    </div>
-                    <div class="klinik-stat-divider"></div>
-                    <div class="text-center">
-                        <div class="klinik-stat-num">{{ $stats['kota'] }}</div>
-                        <div class="klinik-stat-label">Kota / Kab.</div>
-                    </div>
-                    <div class="klinik-stat-divider"></div>
-                    <div class="text-center">
-                        <div class="klinik-stat-num">{{ $stats['provinsi'] }}</div>
-                        <div class="klinik-stat-label">Provinsi</div>
-                    </div>
                 </div>
             </div>
         </div>

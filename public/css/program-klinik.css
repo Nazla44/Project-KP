@@ -1,0 +1,408 @@
+.pk-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 32px;
+  list-style: none;
+  padding: 0;
+}
+.pk-breadcrumb a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.pk-breadcrumb a:hover { color: var(--color-primary); }
+.pk-breadcrumb .bi {
+  font-size: 10px;
+  margin: 0 2px;
+}
+.pk-breadcrumb span:last-child { color: rgba(255,255,255,0.7); }
+
+/* Pill */
+.pk-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--border-radius-pill);
+  padding: 8px 18px;
+  margin-bottom: 28px;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(8px);
+}
+/* ── Hero ── */
+.klinik-hero {
+  position: relative;
+  padding: 72px 0 52px;
+  border-bottom: 1px solid var(--color-border);
+  background-image: url('/assets/image/program-klinik-bg.png');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+.klinik-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+.klinik-hero > * {
+  position: relative;
+  z-index: 2;
+}
+.klinik-hero-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.klinik-hero-title {
+  font-size: clamp(40px, 5.5vw, 72px);
+  font-weight: 300;
+  color: var(--color-white);
+  line-height: 1.3;
+  margin: 12px 0 14px;
+  letter-spacing: .02em;
+}
+.klinik-hero-title span { color: var(--color-primary); }
+.klinik-hero-desc {
+  font-size: 15px;
+  color: var(--color-white);
+  max-width: 520px;
+  line-height: 1.75;
+}
+.klinik-stats-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--border-radius-card);
+  padding: 22px 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,.06);
+  flex-shrink: 0;
+  margin-top: 28px;
+}
+.klinik-stat-num {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--color-white);
+  line-height: 1;
+}
+.klinik-stat-label {
+  font-size: 11px;
+  color: var(--color-white);
+  margin-top: 3px;
+}
+.klinik-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--color-border);
+}
+.section-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--border-radius-pill);
+  padding: 8px 18px;
+  margin-bottom: 28px;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(8px);
+}
+
+/* ── GPS Banner ── */
+.gps-banner {
+  background: var(--color-primary);
+  border-radius: var(--border-radius-card);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity .2s, transform .2s;
+  margin-bottom: 24px;
+}
+.gps-banner:hover { opacity: .93; transform: translateY(-1px); text-decoration: none; }
+.gps-banner-icon {
+  width: 46px;
+  height: 46px;
+  background: rgb(128, 2, 2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  flex-shrink: 0;
+  position: relative;
+}
+.gps-pulse {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid rgba(213,0,0,.5);
+  animation: gpsPulse 1.6s ease-out infinite;
+}
+@keyframes gpsPulse {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+.gps-banner-text { flex: 1; }
+.gps-banner-text strong { display: block; color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.gps-banner-text span { color: rgba(255,255,255,.55); font-size: 12px; }
+.gps-banner-arrow { color: rgba(213,0,0,.7); font-size: 22px; }
+
+/* ── Filter Bar ── */
+.filter-search-wrap {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: 50px;
+  padding: 10px 20px;
+  gap: 10px;
+  transition: border-color .2s, box-shadow .2s;
+  margin-bottom: 14px;
+}
+.filter-search-wrap:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(213,0,0,.08);
+}
+.filter-search-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  background: transparent;
+}
+.filter-search-wrap svg { color: #aaa; flex-shrink: 0; }
+
+.filter-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.filter-chip {
+  border: 1.5px solid var(--color-border);
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.filter-chip:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.filter-chip.active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ── Klinik Card ── */
+.klinik-card {
+  background: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-card);
+  padding: 18px 20px;
+  transition: border-color .2s, box-shadow .2s;
+  position: relative;
+}
+.klinik-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(213,0,0,.09);
+}
+.klinik-card-body { display: flex; gap: 14px; align-items: flex-start; }
+.klinik-thumb {
+  width: 50px;
+  height: 50px;
+  background: var(--color-primary-light);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.klinik-card-info { flex: 1; min-width: 0; }
+.klinik-card-nama {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 3px;
+}
+.klinik-card-tipe {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin: 0 0 5px;
+}
+.klinik-card-alamat {
+  font-size: 12px;
+  color: var(--color-text-light);
+  margin: 0 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.klinik-jam-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.jam-text { font-size: 11px; color: var(--color-text-light); }
+.status-buka  { font-size: 11px; font-weight: 600; color: #16a34a; }
+.status-tutup { font-size: 11px; font-weight: 600; color: #dc2626; }
+.layanan-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.layanan-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.klinik-aksi { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-hubungi, .btn-maps {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .2s;
+  text-decoration: none;
+}
+.btn-hubungi:hover, .btn-maps:hover { opacity: .85; text-decoration: none; }
+.btn-hubungi { background: var(--color-primary); color: #fff; }
+.btn-maps    { background: #f1f3f4; color: var(--color-text); }
+
+/* ── Result header ── */
+.result-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.result-title  { font-size: 16px; font-weight: 600; color: var(--color-text); margin: 0; }
+.result-badge  {
+  font-size: 11px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.klinik-list { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── Empty state ── */
+.state-center {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.state-center h4 { font-size: 18px; font-weight: 600; color: var(--color-text); }
+.state-center p  { font-size: 14px; max-width: 360px; }
+
+/* ── page-hero override untuk klinik ── */
+.page-hero--klinik { height: 420px; }
+.page-hero-bg--klinik {
+  background-image: url('/assets/image/program-klinik-bg.png') !important;
+}
+.page-hero-tag {
+  display: inline-block;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 6px 18px;
+  border-radius: 50px;
+  margin-bottom: 16px;
+}
+.klinik-stats-inline {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 14px;
+  padding: 16px 24px;
+  width: fit-content;
+  margin-top: 16px;
+}
+.ksi-item { text-align: center; }
+.ksi-num  { font-size: 24px; font-weight: 700; color: var(--color-primary); line-height: 1; }
+.ksi-label { font-size: 10px; color: #9aa0a6; margin-top: 3px; white-space: nowrap; }
+.ksi-divider { width: 1px; height: 32px; background: #e5e5e5; }
+
+/* ── Responsive ── */
+@media (max-width: 991px) {
+  .page-hero--klinik { height: auto; min-height: 320px; }
+  .klinik-stats-box { padding: 16px 20px; gap: 18px; }
+}
+@media (max-width: 576px) {
+  .page-hero--klinik { min-height: 260px; }
+  .klinik-stats-inline { gap: 14px; padding: 12px 16px; }
+  .ksi-num { font-size: 18px; }
+  .klinik-hero-title { font-size: 28px; }
+}
+
+/* ── Override hero untuk halaman klinik ── */
+.pk-hero--klinik .pk-hero-bg,
+.pk-hero-bg--klinik {
+  background-image: url('/assets/image/program-klinik-bg.png') !important;
+}
+
+.pk-hero--klinik .pk-hero-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 5, 5, 0.90) 0%,
+    rgba(30, 5, 5, 0.78) 50%,
+    rgba(15, 10, 10, 0.85) 100%
+  );
+}
+
+/* Override pk-btn-outline-ghost agar pakai class komunitas */
+.pk-btn-outline-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 12px 22px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+.pk-btn-outline-ghost:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.6);
+  color: #fff;
+  text-decoration: none;
+}
