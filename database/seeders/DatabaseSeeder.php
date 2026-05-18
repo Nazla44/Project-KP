@@ -15,11 +15,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::query()->updateOrCreate([
+            'email' => env('SUPER_ADMIN_EMAIL', 'superadmin@stpi.test'),
+        ], [
+            'name' => env('SUPER_ADMIN_NAME', 'Super Admin'),
+            'phone_number' => env('SUPER_ADMIN_PHONE', '081234567890'),
+            'password' => env('SUPER_ADMIN_PASSWORD', 'password'),
+            'role' => User::ROLE_SUPER_ADMIN,
+            'is_active' => true,
+            'email_verified_at' => now(),
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::query()->updateOrCreate([
+            'email' => env('KADER_EMAIL', 'kader@stpi.test'),
+        ], [
+            'name' => env('KADER_NAME', 'Kader Demo'),
+            'phone_number' => env('KADER_PHONE', '081234567891'),
+            'password' => env('KADER_PASSWORD', 'password'),
+            'role' => User::ROLE_KADER,
+            'is_active' => true,
+            'email_verified_at' => now(),
         ]);
     }
 }
