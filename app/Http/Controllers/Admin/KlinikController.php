@@ -13,6 +13,7 @@ use App\Services\KlinikImportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -27,7 +28,9 @@ class KlinikController extends Controller
         return view('admin.kliniks.index', [
             'pageTitle' => 'Kelola Klinik',
             'kliniks' => Klinik::query()->orderBy('nama')->get(),
-            'recentImports' => KlinikImport::query()->with('user')->latest()->take(10)->get(),
+            'recentImports' => Schema::hasTable('klinik_imports')
+                ? KlinikImport::query()->with('user')->latest()->take(10)->get()
+                : collect(),
         ]);
     }
 
@@ -117,6 +120,13 @@ class KlinikController extends Controller
 
     public function importHistory(Request $request): JsonResponse
     {
+        if (!Schema::hasTable('klinik_imports')) {
+            return response()->json([
+                'data' => [],
+                'message' => 'Tabel import klinik belum tersedia. Jalankan migration terlebih dahulu.',
+            ]);
+        }
+
         return response()->json(
             KlinikImport::query()
                 ->with('user')

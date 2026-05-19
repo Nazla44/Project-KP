@@ -7,11 +7,7 @@
 @endphp
 
 <div class="row g-3">
-    <div class="col-md-4">
-        <label class="form-label">Kode Klinik</label>
-        <input type="text" name="kode_klinik" class="form-control" value="{{ old('kode_klinik', $klinik?->kode_klinik) }}">
-    </div>
-    <div class="col-md-8">
+    <div class="col-12">
         <label class="form-label">Nama Klinik</label>
         <input type="text" name="nama" class="form-control" required value="{{ old('nama', $klinik?->nama) }}">
     </div>
