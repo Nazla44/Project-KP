@@ -532,7 +532,7 @@
                         <tr>
                             <td>
                                 <div class="article-title-cell">
-                                    <img src="{{ asset($article->cover_image_url) }}" alt="{{ $article->judul }}"
+                                    <img src="{{ $article->cover_image_url }}" alt="{{ $article->judul }}"
                                         class="article-cover-thumb">
 
                                     <div>
@@ -569,7 +569,7 @@
 
                             <td>
                                 <div class="articles-actions">
-                                    <a href="{{ route('artikel.show', $article->slug) }}" class="articles-icon-button"
+                                    <a href="{{ route('artikel.show', $article->id) }}" class="articles-icon-button"
                                         title="Lihat artikel" target="_blank">
                                         <i class="bi bi-eye"></i>
                                     </a>
@@ -760,7 +760,7 @@
                                     @if ($article->cover_image_url)
                                         <div class="article-cover-preview">
                                             <span>Cover saat ini</span>
-                                            <img src="{{ asset($article->cover_image_url) }}"
+                                            <img src="{{ $article->cover_image_url }}"
                                                 alt="{{ $article->judul }}">
                                         </div>
                                     @endif

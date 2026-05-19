@@ -49,10 +49,10 @@ class Artikel extends Model
     public function getCoverImageUrlAttribute(): string
     {
         if ($this->cover_image && Storage::disk('public')->exists($this->cover_image)) {
-            return Storage::url($this->cover_image);
+            return asset(Storage::url($this->cover_image));
         }
 
-        return 'assets/image/news-1.png';
+        return asset('assets/image/news-1.png');
     }
 
     public function buildUniqueSlug(?string $title = null): string

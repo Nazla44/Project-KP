@@ -175,11 +175,25 @@ class PageController extends Controller
         ]);
     }
 
-    public function artikelDetail(string $slug)
+    public function artikelDetail(string $identifier)
     {
         $semua = $this->allPublishedArticles();
+        $artikel = null;
 
-        $artikel = collect($semua)->firstWhere('slug', $slug);
+        if (ctype_digit($identifier)) {
+            $articleModel = Artikel::query()
+                ->when(!auth()->check(), fn ($query) => $query->where('status', 'tayang'))
+                ->find((int) $identifier);
+
+            if ($articleModel) {
+                $artikel = $articleModel->toPublicArticleArray();
+                $artikel['id'] = $articleModel->id;
+            }
+        }
+
+        if (!$artikel) {
+            $artikel = collect($semua)->firstWhere('slug', $identifier);
+        }
 
         if (!$artikel) {
             abort(404);
@@ -192,12 +206,14 @@ class PageController extends Controller
             ->toArray();
 
         // Tentukan URL "Kembali" berdasarkan asal artikel
-        $backUrl = match ($artikel['source'] ?? 'berita') {
-            'komunitas' => route('program-komunitas'),
+        $backUrl = match (true) {
+            ctype_digit($identifier) && auth()->check() => route('admin.articles.index'),
+            ($artikel['source'] ?? 'berita') === 'komunitas' => route('program-komunitas'),
             default => route('berita'),
         };
-        $backLabel = match ($artikel['source'] ?? 'berita') {
-            'komunitas' => 'Kembali ke Program Komunitas',
+        $backLabel = match (true) {
+            ctype_digit($identifier) && auth()->check() => 'Kembali ke Kelola Artikel',
+            ($artikel['source'] ?? 'berita') === 'komunitas' => 'Kembali ke Program Komunitas',
             default => 'Kembali ke Berita & Kegiatan',
         };
 

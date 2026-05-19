@@ -32,7 +32,8 @@
 
                 {{-- Hero Image --}}
                 <div class="ad-hero-wrap mb-5">
-                    <img src="{{ asset($artikel['img']) }}" alt="{{ $artikel['title'] }}" class="ad-hero-img">
+                    <img src="{{ \Illuminate\Support\Str::startsWith($artikel['img'], ['http://', 'https://']) ? $artikel['img'] : asset(ltrim($artikel['img'], '/')) }}"
+                        alt="{{ $artikel['title'] }}" class="ad-hero-img">
                 </div>
 
                 {{-- ── BODY KONTEN ─────────────────────────────────────── --}}
@@ -120,7 +121,8 @@
                                 <a href="{{ route('artikel.show', $rel['slug']) }}"
                                     class="ad-related-card text-decoration-none d-flex gap-3">
                                     <div class="ad-related-img-wrap flex-shrink-0">
-                                        <img src="{{ asset($rel['img']) }}" alt="{{ $rel['title'] }}" class="ad-related-img">
+                                        <img src="{{ \Illuminate\Support\Str::startsWith($rel['img'], ['http://', 'https://']) ? $rel['img'] : asset(ltrim($rel['img'], '/')) }}"
+                                            alt="{{ $rel['title'] }}" class="ad-related-img">
                                     </div>
                                     <div class="flex-grow-1">
                                         <span class="ad-related-cat">{{ $rel['category'] }}</span>
