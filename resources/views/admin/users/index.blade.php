@@ -444,7 +444,7 @@
 @section('content')
     <section class="users-page-header">
         <div class="users-page-title">
-            <span>Manajemen Akun</span>
+            <span>Manajemen</span>
             <h1>Kelola Users</h1>
         </div>
 

@@ -495,7 +495,7 @@
 
     <section class="clinics-page-header">
         <div class="clinics-page-title">
-            <span>Master Data</span>
+            <span>Manajemen</span>
             <h1>{{ $pageTitle ?? 'Kelola Klinik' }}</h1>
         </div>
 

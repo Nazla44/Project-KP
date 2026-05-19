@@ -465,7 +465,7 @@
 @section('content')
     <section class="articles-page-header">
         <div class="articles-page-title">
-            <span>Konten</span>
+            <span>Manajemen</span>
             <h1>{{ $pageTitle ?? 'Kelola Artikel' }}</h1>
         </div>
 
@@ -760,8 +760,7 @@
                                     @if ($article->cover_image_url)
                                         <div class="article-cover-preview">
                                             <span>Cover saat ini</span>
-                                            <img src="{{ $article->cover_image_url }}"
-                                                alt="{{ $article->judul }}">
+                                            <img src="{{ $article->cover_image_url }}" alt="{{ $article->judul }}">
                                         </div>
                                     @endif
                                 </div>
