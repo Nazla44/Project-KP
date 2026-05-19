@@ -284,7 +284,7 @@
             <div class="icon">
                 <i class="bi bi-newspaper"></i>
             </div>
-            <span>Artikel Tayang</span>
+            <span>Artikel Publish</span>
             <strong>{{ $stats['published_articles'] ?? 0 }}</strong>
         </article>
 
