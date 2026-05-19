@@ -135,6 +135,7 @@ class PageController extends Controller
     {
         return [
             'id' => $klinik->id,
+            'kode_klinik' => $klinik->kode_klinik,
             'nama' => $klinik->nama,
             'tipe' => $klinik->tipe,
             'kota' => $klinik->kota,

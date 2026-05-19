@@ -11,6 +11,7 @@ class Klinik extends Model
 
     protected $table = 'klinik';
     protected $fillable = [
+        'kode_klinik',
         'nama',
         'tipe',
         'alamat',

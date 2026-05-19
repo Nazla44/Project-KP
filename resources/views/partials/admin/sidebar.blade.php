@@ -27,6 +27,12 @@
                 <i class="bi bi-newspaper"></i>
                 <span>Artikel</span>
             </a>
+
+            <a href="{{ route('admin.kliniks.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.kliniks.*') ? 'active' : '' }}">
+                <i class="bi bi-hospital"></i>
+                <span>Klinik</span>
+            </a>
         </nav>
     </div>
 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\ArtikelController;
+use App\Http\Controllers\Admin\KlinikController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
@@ -19,6 +20,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::get('/kliniks', [KlinikController::class, 'index'])->name('kliniks.index');
+        Route::get('/kliniks/imports', [KlinikController::class, 'importHistory'])->name('kliniks.imports');
+        Route::get('/kliniks/{klinik}', [KlinikController::class, 'show'])->name('kliniks.show');
+        Route::post('/kliniks', [KlinikController::class, 'store'])->name('kliniks.store');
+        Route::put('/kliniks/{klinik}', [KlinikController::class, 'update'])->name('kliniks.update');
+        Route::delete('/kliniks/{klinik}', [KlinikController::class, 'destroy'])->name('kliniks.destroy');
+        Route::post('/kliniks/import/preview', [KlinikController::class, 'previewImport'])->name('kliniks.import.preview');
+        Route::post('/kliniks/import/commit', [KlinikController::class, 'commitImport'])->name('kliniks.import.commit');
         Route::get('/articles', [ArtikelController::class, 'index'])->name('articles.index');
         Route::post('/articles', [ArtikelController::class, 'store'])->name('articles.store');
         Route::put('/articles/{artikel}', [ArtikelController::class, 'update'])->name('articles.update');

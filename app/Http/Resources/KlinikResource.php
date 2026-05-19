@@ -19,6 +19,7 @@ class KlinikResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'kode_klinik' => $this->kode_klinik,
             'nama' => $this->nama,
             'tipe' => $this->tipe,
             'alamat' => $this->alamat,
