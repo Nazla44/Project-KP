@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artikel;
+use App\Models\Klinik;
 use App\Support\StpiData;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    // =========================================================================
-    // Semua method lama tetap sama persis — hanya tambah artikelDetail() di bawah
-    // =========================================================================
-
     public function home()
     {
         return view('pages.home', [
@@ -101,17 +98,57 @@ class PageController extends Controller
 
     private function getKlinikData(): array
     {
+        $kliniks = Klinik::query()
+            ->where('status', 'aktif')
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->orderBy('provinsi')
+            ->orderBy('kota')
+            ->orderBy('nama')
+            ->get();
+
+        if ($kliniks->isNotEmpty()) {
+            return $kliniks
+                ->map(fn (Klinik $klinik) => $this->mapKlinikForFrontend($klinik))
+                ->all();
+        }
+
         $path = public_path('data/klinik.json');
-        if (!file_exists($path))
+
+        if (!file_exists($path)) {
             return [];
+        }
+
         $data = json_decode(file_get_contents($path), true);
-        if (!is_array($data))
+
+        if (!is_array($data)) {
             return [];
+        }
+
         return array_values(array_filter(
             $data,
-            fn($k) =>
-            isset($k['nama'], $k['lat'], $k['lng']) && is_numeric($k['lat']) && is_numeric($k['lng'])
+            fn ($k) => isset($k['nama'], $k['lat'], $k['lng']) && is_numeric($k['lat']) && is_numeric($k['lng'])
         ));
+    }
+
+    private function mapKlinikForFrontend(Klinik $klinik): array
+    {
+        return [
+            'id' => $klinik->id,
+            'nama' => $klinik->nama,
+            'tipe' => $klinik->tipe,
+            'kota' => $klinik->kota,
+            'provinsi' => $klinik->provinsi,
+            'alamat' => $klinik->alamat,
+            'telepon' => $klinik->telepon,
+            'lat' => $klinik->latitude,
+            'lng' => $klinik->longitude,
+            'jam_buka' => $klinik->jam_buka,
+            'jam_tutup' => $klinik->jam_tutup,
+            'hari_buka' => $klinik->hari_buka,
+            'hari_tutup' => $klinik->hari_tutup,
+            'layanan' => $klinik->layanan ?? [],
+        ];
     }
 
     public function karir(Request $request)

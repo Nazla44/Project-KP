@@ -24,5 +24,9 @@ class DatabaseSeeder extends Seeder
             'role' => User::ROLE_SUPER_ADMIN,
             'is_active' => true,
         ]);
+
+        $this->call([
+            KlinikSeeder::class,
+        ]);
     }
 }
