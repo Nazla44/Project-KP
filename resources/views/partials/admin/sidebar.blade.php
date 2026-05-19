@@ -24,7 +24,7 @@
 
             <a href="{{ route('admin.articles.index') }}"
                 class="admin-nav-link {{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
-                <i class="bi bi-journal-richtext"></i>
+                <i class="bi bi-newspaper"></i>
                 <span>Artikel</span>
             </a>
         </nav>

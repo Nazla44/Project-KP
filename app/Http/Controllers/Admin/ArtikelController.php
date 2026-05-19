@@ -22,13 +22,6 @@ class ArtikelController extends Controller
         ]);
     }
 
-    public function create(): View
-    {
-        return view('admin.artikel.create', [
-            'pageTitle' => 'Tambah Artikel',
-        ]);
-    }
-
     public function store(Request $request): RedirectResponse
     {
         $validated = $this->validateArticle($request);
@@ -59,14 +52,6 @@ class ArtikelController extends Controller
         }
 
         return redirect()->route('admin.articles.index')->with('status', 'Artikel berhasil dibuat.');
-    }
-
-    public function edit(Artikel $artikel): View
-    {
-        return view('admin.artikel.edit', [
-            'pageTitle' => 'Edit Artikel',
-            'artikel' => $artikel,
-        ]);
     }
 
     public function update(Request $request, Artikel $artikel): RedirectResponse

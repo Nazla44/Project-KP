@@ -20,9 +20,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::get('/articles', [ArtikelController::class, 'index'])->name('articles.index');
-        Route::get('/articles/create', [ArtikelController::class, 'create'])->name('articles.create');
         Route::post('/articles', [ArtikelController::class, 'store'])->name('articles.store');
-        Route::get('/articles/{artikel}/edit', [ArtikelController::class, 'edit'])->name('articles.edit');
         Route::put('/articles/{artikel}', [ArtikelController::class, 'update'])->name('articles.update');
         Route::delete('/articles/{artikel}', [ArtikelController::class, 'destroy'])->name('articles.destroy');
         Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
