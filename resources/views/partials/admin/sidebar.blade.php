@@ -13,7 +13,7 @@
             <a href="{{ route('admin.dashboard') }}"
                 class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-grid-1x2-fill"></i>
-                <span>Overview</span>
+                <span>Dashboard</span>
             </a>
 
             <a href="{{ route('admin.users.index') }}"
