@@ -337,7 +337,6 @@
             <div class="dashboard-section-header">
                 <div>
                     <h2>Artikel Terbaru</h2>
-                    <p>Konten terbaru yang dibuat atau diperbarui.</p>
                 </div>
 
                 <a href="{{ route('admin.articles.index') }}" class="dashboard-section-link">
@@ -375,7 +374,6 @@
             <div class="dashboard-section-header">
                 <div>
                     <h2>Klinik Terbaru</h2>
-                    <p>Data klinik terbaru yang tersimpan.</p>
                 </div>
 
                 <a href="{{ route('admin.kliniks.index') }}" class="dashboard-section-link">
@@ -413,7 +411,6 @@
             <div class="dashboard-section-header">
                 <div>
                     <h2>User Terbaru</h2>
-                    <p>Akun terbaru yang masuk ke sistem.</p>
                 </div>
 
                 <a href="{{ route('admin.users.index') }}" class="dashboard-section-link">
@@ -449,7 +446,6 @@
             <div class="dashboard-section-header">
                 <div>
                     <h2>Import Klinik Terbaru</h2>
-                    <p>Riwayat upload CSV klinik terakhir.</p>
                 </div>
 
                 <a href="{{ route('admin.kliniks.index') }}" class="dashboard-section-link">
