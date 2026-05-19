@@ -51,7 +51,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background:linear-gradient(135deg, rgba(10, 5, 5, 0.92) 0%, rgba(30, 5, 5, 0.80) 50%, rgba(15, 10, 10, 0.88) 100%);
   z-index: 1;
 }
 .klinik-hero > * {

@@ -20,7 +20,7 @@
                 <div>
                     <span class="section-tag-pill">Program Klinik</span>
                     <h1 class="klinik-hero-title">
-                        Temukan <span>Klinik TBC</span><br>
+                        Temukan <span><i>Klinik TBC</i></span><br>
                         di Seluruh Indonesia
                     </h1>
                     <p class="klinik-hero-desc">

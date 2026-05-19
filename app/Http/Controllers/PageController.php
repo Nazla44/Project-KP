@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artikel;
+use App\Models\Klinik;
 use App\Support\StpiData;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Laporan;
 
 class PageController extends Controller
 {
@@ -17,7 +21,7 @@ class PageController extends Controller
             'pageTitle' => 'Home',
             'homeCards' => StpiData::homeCards(),
             'impactData' => StpiData::impactData(),
-            'articles' => StpiData::articles(),
+            'articles' => $this->getHomeArticles(),
         ]);
     }
 
@@ -94,23 +98,81 @@ class PageController extends Controller
 
     public function klinikTerdekat()
     {
-        $klinik = $this->getKlinikData();
+        $klinik = $this->getKlinikData(true);
         return view('pages.klinik-terdekat', compact('klinik'));
     }
 
-    private function getKlinikData(): array
+    private function getKlinikData(bool $onlyWithCoordinate = false): array
     {
+        try {
+            $query = Klinik::where('status', 'aktif')->orderBy('nama');
+
+            if ($onlyWithCoordinate) {
+                $query->whereNotNull('lat')->whereNotNull('lng');
+            }
+
+            $data = $query->get()
+                ->map(function (Klinik $klinik) {
+                    return [
+                        'id' => $klinik->id,
+                        'nama' => $klinik->nama,
+                        'tipe' => $klinik->tipe ?? 'Klinik',
+                        'kota' => $klinik->kota ?? '-',
+                        'provinsi' => $klinik->provinsi ?? '-',
+                        'alamat' => $klinik->alamat,
+                        'telepon' => $klinik->telepon ?? '-',
+                        'lat' => $klinik->lat,
+                        'lng' => $klinik->lng,
+                        'jam_buka' => $klinik->jam_buka ?? '08:00',
+                        'jam_tutup' => $klinik->jam_tutup ?? '16:00',
+                        'hari_buka' => $klinik->hari_buka ?? 'Senin – Jumat',
+                        'layanan' => $klinik->layanan ?: ['Diagnosis TBC', 'Pengobatan OAT'],
+                    ];
+                })
+                ->filter(function ($k) use ($onlyWithCoordinate) {
+                    if (empty($k['nama'])) {
+                        return false;
+                    }
+
+                    if ($onlyWithCoordinate) {
+                        return is_numeric($k['lat']) && is_numeric($k['lng']);
+                    }
+
+                    return true;
+                })
+                ->values()
+                ->toArray();
+
+            if (!empty($data)) {
+                return $data;
+            }
+        } catch (\Throwable $e) {
+            // Fallback ke JSON ketika tabel klinik belum dimigrate.
+        }
+
         $path = public_path('data/klinik.json');
-        if (!file_exists($path))
+
+        if (!file_exists($path)) {
             return [];
+        }
+
         $data = json_decode(file_get_contents($path), true);
-        if (!is_array($data))
+
+        if (!is_array($data)) {
             return [];
-        return array_values(array_filter(
-            $data,
-            fn($k) =>
-            isset($k['nama'], $k['lat'], $k['lng']) && is_numeric($k['lat']) && is_numeric($k['lng'])
-        ));
+        }
+
+        return array_values(array_filter($data, function ($k) use ($onlyWithCoordinate) {
+            if (empty($k['nama'])) {
+                return false;
+            }
+
+            if ($onlyWithCoordinate) {
+                return isset($k['lat'], $k['lng']) && is_numeric($k['lat']) && is_numeric($k['lng']);
+            }
+
+            return true;
+        }));
     }
 
     public function karir(Request $request)
@@ -142,7 +204,18 @@ class PageController extends Controller
 
     public function akuntabilitas(Request $request)
     {
-        $documents = StpiData::documents();
+        $documents = Laporan::where('status', 'tayang')
+            ->latest()
+            ->get()
+            ->map(function ($laporan) {
+                return [
+                    'nama' => $laporan->nama,
+                    'tanggal' => \Carbon\Carbon::parse($laporan->tanggal)->translatedFormat('d F Y'),
+                    'link' => asset('storage/' . $laporan->file),
+                ];
+            })
+            ->toArray();
+
         return view('pages.akuntabilitas', [
             'pageTitle' => 'Akuntabilitas',
             'laporanPage' => $this->paginateArray($documents, $request, 12, 'laporan_page'),
@@ -152,7 +225,8 @@ class PageController extends Controller
 
     public function berita(Request $request)
     {
-        $all = StpiData::allArtikel();
+        $all = $this->getAllPublicArticles();
+
         return view('pages.berita', [
             'pageTitle' => 'Berita & Kegiatan',
             'beritaPage' => $this->paginateArray($all, $request, 6, 'page'),
@@ -161,44 +235,31 @@ class PageController extends Controller
 
     public function beritaDetail(string $slug)
     {
-        $article = collect(StpiData::allArtikel())->firstWhere('slug', $slug);
-        if (!$article)
-            abort(404);
-        $related = collect(StpiData::allArtikel())
-            ->whereIn('slug', $article['related'] ?? [])
-            ->values()->toArray();
-        return view('pages.berita-detail', [
-            'pageTitle' => $article['title'],
-            'article' => $article,
-            'related' => $related,
-        ]);
+        return $this->showPublicArticle($slug, 'berita');
     }
 
     public function artikelDetail(string $slug)
     {
-        $semua = StpiData::allArtikel();
+        return $this->showPublicArticle($slug, 'artikel');
+    }
 
+    private function showPublicArticle(string $slug, string $source = 'artikel')
+    {
+        $semua = $this->getAllPublicArticles();
         $artikel = collect($semua)->firstWhere('slug', $slug);
 
         if (!$artikel) {
             abort(404);
         }
 
-        // Artikel terkait berdasarkan daftar slug di field 'related'
         $related = collect($semua)
-            ->whereIn('slug', $artikel['related'] ?? [])
+            ->where('slug', '!=', $artikel['slug'])
+            ->take(3)
             ->values()
             ->toArray();
 
-        // Tentukan URL "Kembali" berdasarkan asal artikel
-        $backUrl = match ($artikel['source'] ?? 'berita') {
-            'komunitas' => route('program-komunitas'),
-            default => route('berita'),
-        };
-        $backLabel = match ($artikel['source'] ?? 'berita') {
-            'komunitas' => 'Kembali ke Program Komunitas',
-            default => 'Kembali ke Berita & Kegiatan',
-        };
+        $backUrl = route('berita');
+        $backLabel = 'Kembali ke Berita & Kegiatan';
 
         return view('pages.artikel-detail', [
             'pageTitle' => $artikel['title'],
@@ -207,6 +268,74 @@ class PageController extends Controller
             'backUrl' => $backUrl,
             'backLabel' => $backLabel,
         ]);
+    }
+
+    private function getHomeArticles(): array
+    {
+        $artikelDb = $this->getDatabaseArticles()->take(3)->values()->toArray();
+
+        if (!empty($artikelDb)) {
+            return $artikelDb;
+        }
+
+        return StpiData::articles();
+    }
+
+    private function getAllPublicArticles(): array
+    {
+        $artikelDb = $this->getDatabaseArticles()->values()->toArray();
+        $artikelStatic = StpiData::allArtikel();
+
+        return array_values(array_merge($artikelDb, $artikelStatic));
+    }
+
+    private function getDatabaseArticles()
+    {
+        try {
+            return Artikel::where('status', 'tayang')
+                ->latest('tanggal')
+                ->get()
+                ->map(fn (Artikel $artikel) => $this->mapArtikelForPublic($artikel));
+        } catch (\Throwable $e) {
+            return collect();
+        }
+    }
+
+    private function mapArtikelForPublic(Artikel $artikel): array
+    {
+        $paragraphs = collect(preg_split('/\n\s*\n/', trim($artikel->isi)))
+            ->filter()
+            ->map(fn ($text) => [
+                'type' => 'paragraph',
+                'text' => trim($text),
+            ])
+            ->values()
+            ->toArray();
+
+        if (empty($paragraphs)) {
+            $paragraphs = [[
+                'type' => 'paragraph',
+                'text' => $artikel->isi,
+            ]];
+        }
+
+        $slug = Str::slug($artikel->judul) . '-' . $artikel->id;
+
+        return [
+            'id' => $artikel->id,
+            'title' => $artikel->judul,
+            'slug' => $slug,
+            'category' => $artikel->kategori,
+            'author' => $artikel->penulis,
+            'date' => optional($artikel->tanggal)->format('d M Y') ?? '-',
+            'excerpt' => Str::limit(strip_tags($artikel->isi), 140),
+            'img' => 'assets/image/news-1.png',
+            'content' => $paragraphs,
+            'tags' => [$artikel->kategori],
+            'source' => 'berita',
+            'related' => [],
+            'link' => route('artikel.show', $slug),
+        ];
     }
 
     public function searchApi(Request $request): \Illuminate\Http\JsonResponse
@@ -366,6 +495,7 @@ class PageController extends Controller
             'pageTitle' => 'Pendaftaran Berhasil',
             'nama' => session('kader_nama'),
             'email' => session('kader_email'),
+            'hp' => session('kader_hp'),
         ]);
     }
 

@@ -15,6 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            AdminSeeder::class,
+            KlinikSeeder::class,
+            ArtikelSeeder::class,
+            LaporanSeeder::class,
+        ]);
+
         User::query()->updateOrCreate([
             'email' => env('SUPER_ADMIN_EMAIL', 'superadmin@stpi.test'),
         ], [
