@@ -19,10 +19,12 @@
                     <h1 class="fk-sukses-title">Pendaftaran Berhasil!</h1>
 
                     <p class="fk-sukses-desc">
-                        Terima kasih, <strong>{{ $nama }}</strong>! Pendaftaran Anda sebagai kader komunitas TBC telah kami
+                        Terima kasih, <strong>{{ $nama }}</strong>! Pendaftaran Anda sebagai kader komunitas TBC
+                        telah kami
                         terima.
-                        Tim STPI akan menghubungi Anda melalui email <strong>{{ $email }}</strong> dalam <strong>3–5 hari
-                            kerja</strong>.
+                        Data Anda sudah masuk ke sistem dan sedang menunggu proses verifikasi admin.
+                        Hasil approval atau penolakan akan dikirim ke email <strong>{{ $email }}</strong>.
+                        Jika disetujui, Anda akan menerima link untuk membuat password akun kader.
                     </p>
 
                     <div class="fk-sukses-steps">

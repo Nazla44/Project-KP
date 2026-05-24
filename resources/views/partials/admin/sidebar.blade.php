@@ -22,6 +22,12 @@
                 <span>Users</span>
             </a>
 
+            <a href="{{ route('admin.kaders.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.kaders.*') ? 'active' : '' }}">
+                <i class="bi bi-person-check-fill"></i>
+                <span>Kader</span>
+            </a>
+
             <a href="{{ route('admin.articles.index') }}"
                 class="admin-nav-link {{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
                 <i class="bi bi-newspaper"></i>

@@ -24,6 +24,7 @@ class AuthController extends Controller
 
         $user = User::query()
             ->where('is_active', true)
+            ->where('role', User::ROLE_KADER)
             ->where(function ($query) use ($validated) {
                 $query->where('email', $validated['login'])
                     ->orWhere('phone_number', $validated['login']);
@@ -42,7 +43,7 @@ class AuthController extends Controller
             'message' => 'Login berhasil.',
             'token_type' => 'Bearer',
             'access_token' => $token,
-            'user' => $this->userPayload($user),
+            'user' => $this->userPayload($user->load('kader')),
         ]);
     }
 
@@ -64,6 +65,14 @@ class AuthController extends Controller
             'phone_number' => $user->phone_number,
             'role' => $user->role,
             'is_active' => $user->is_active,
+            'kader' => $user->kader ? [
+                'id' => $user->kader->id,
+                'nik' => $user->kader->nik,
+                'status' => $user->kader->status,
+                'provinsi' => $user->kader->provinsi,
+                'kab_kota' => $user->kader->kab_kota,
+                'kecamatan' => $user->kader->kecamatan,
+            ] : null,
         ];
     }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->foreign('klinik_id')
                 ->references('id')
                 ->on('klinik')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
         });
     }
 

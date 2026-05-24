@@ -2,25 +2,36 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Kader;
-use App\Models\Klinik;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class KaderSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         $faker = Faker::create('id_ID');
-        $klinikIds = Klinik::pluck('id');
 
         for ($i = 0; $i < 10; $i++) {
-            Kader::create([
+            Kader::query()->updateOrCreate([
+                'nik' => $faker->unique()->numerify('################'),
+            ], [
                 'nama' => $faker->name,
-                'klinik_id' => $faker->randomElement($klinikIds),
+                'email' => $faker->unique()->safeEmail,
                 'hp' => $faker->phoneNumber,
-                'tgl_bergabung' => $faker->date(),
-                'status' => $faker->randomElement(['verifikasi', 'aktif'])
+                'tanggal_lahir' => $faker->date('Y-m-d', '-20 years'),
+                'jenis_kelamin' => $faker->randomElement(['L', 'P']),
+                'alamat' => $faker->address,
+                'provinsi' => 'DKI Jakarta',
+                'kab_kota' => 'Jakarta Selatan',
+                'kecamatan' => 'Kebayoran Baru',
+                'pekerjaan' => $faker->jobTitle,
+                'pendidikan' => $faker->randomElement(['SMA', 'D3', 'S1']),
+                'motivasi' => $faker->sentence(12),
+                'pengalaman_tb' => $faker->randomElement(['penyintas', 'keluarga', 'relawan', 'belum']),
+                'ketersediaan' => $faker->randomElement(['penuh', 'paruh', 'akhir_pekan']),
+                'tgl_bergabung' => now()->toDateString(),
+                'status' => $faker->randomElement([Kader::STATUS_VERIFIKASI, Kader::STATUS_AKTIF]),
             ]);
         }
     }
