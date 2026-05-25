@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@push('styles')
+<?php $__env->startPush('styles'); ?>
     <style>
         .kader-detail-header {
             display: flex;
@@ -339,10 +337,10 @@
             }
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
-    @php
+<?php $__env->startSection('content'); ?>
+    <?php
         $initial = strtoupper(substr($kader->nama ?? 'K', 0, 1));
         $statusClass = match ($kader->status) {
             \App\Models\Kader::STATUS_AKTIF => 'is-active',
@@ -350,7 +348,7 @@
             \App\Models\Kader::STATUS_SUSPEND => 'is-suspend',
             default => 'is-pending',
         };
-    @endphp
+    ?>
 
     <section class="kader-detail-header">
         <div class="kader-detail-title">
@@ -359,47 +357,48 @@
             <p>Review data kader sebelum menyetujui atau menolak pendaftaran.</p>
         </div>
 
-        <a href="{{ route('admin.kaders.index') }}" class="btn btn-outline-secondary kader-back-button">
+        <a href="<?php echo e(route('admin.kaders.index')); ?>" class="btn btn-outline-secondary kader-back-button">
             <i class="bi bi-arrow-left"></i>
             <span>Kembali</span>
         </a>
     </section>
 
-    @if (session('status'))
+    <?php if(session('status')): ?>
         <div class="alert kader-alert kader-alert-success mb-3">
             <i class="bi bi-check-circle-fill"></i>
-            <span>{{ session('status') }}</span>
+            <span><?php echo e(session('status')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    @if ($errors->any())
+    <?php if($errors->any()): ?>
         <div class="alert kader-alert kader-alert-danger mb-3">
             <i class="bi bi-exclamation-triangle-fill"></i>
             <div>
                 <strong>Proses belum bisa dilanjutkan.</strong>
                 <ul class="mb-0 mt-2">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
         </div>
-    @endif
+    <?php endif; ?>
 
     <div class="kader-detail-grid">
         <section class="kader-card">
             <div class="kader-card-header">
                 <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
                     <div class="kader-profile-summary">
-                        <span class="kader-avatar-lg">{{ $initial }}</span>
+                        <span class="kader-avatar-lg"><?php echo e($initial); ?></span>
                         <div>
-                            <strong>{{ $kader->nama }}</strong>
-                            <small>{{ $kader->email }} · {{ $kader->hp }}</small>
+                            <strong><?php echo e($kader->nama); ?></strong>
+                            <small><?php echo e($kader->email); ?> · <?php echo e($kader->hp); ?></small>
                         </div>
                     </div>
 
-                    <span class="kader-status-pill {{ $statusClass }}">
-                        <span></span>{{ $kader->statusLabel() }}
+                    <span class="kader-status-pill <?php echo e($statusClass); ?>">
+                        <span></span><?php echo e($kader->statusLabel()); ?>
+
                     </span>
                 </div>
             </div>
@@ -408,53 +407,53 @@
                 <div class="kader-info-grid">
                     <div class="kader-info-item">
                         <span>NIK</span>
-                        <strong>{{ $kader->nik ?? '-' }}</strong>
+                        <strong><?php echo e($kader->nik ?? '-'); ?></strong>
                     </div>
                     <div class="kader-info-item">
                         <span>Jenis Kelamin</span>
-                        <strong>{{ $kader->jenis_kelamin === 'L' ? 'Laki-laki' : ($kader->jenis_kelamin === 'P' ? 'Perempuan' : '-') }}</strong>
+                        <strong><?php echo e($kader->jenis_kelamin === 'L' ? 'Laki-laki' : ($kader->jenis_kelamin === 'P' ? 'Perempuan' : '-')); ?></strong>
                     </div>
                     <div class="kader-info-item">
                         <span>Tempat/Tanggal Lahir</span>
-                        <strong>{{ $kader->tempat_lahir ?? '-' }}{{ $kader->tanggal_lahir ? ', ' . $kader->tanggal_lahir->format('d M Y') : '' }}</strong>
+                        <strong><?php echo e($kader->tempat_lahir ?? '-'); ?><?php echo e($kader->tanggal_lahir ? ', ' . $kader->tanggal_lahir->format('d M Y') : ''); ?></strong>
                     </div>
                     <div class="kader-info-item">
                         <span>Pendidikan</span>
-                        <strong>{{ $kader->pendidikan ?? '-' }}</strong>
+                        <strong><?php echo e($kader->pendidikan ?? '-'); ?></strong>
                     </div>
                     <div class="kader-info-item">
                         <span>Pekerjaan</span>
-                        <strong>{{ $kader->pekerjaan ?? '-' }}</strong>
+                        <strong><?php echo e($kader->pekerjaan ?? '-'); ?></strong>
                     </div>
                     <div class="kader-info-item">
                         <span>Ketersediaan</span>
-                        <strong>{{ str_replace('_', ' ', $kader->ketersediaan ?? '-') }}</strong>
+                        <strong><?php echo e(str_replace('_', ' ', $kader->ketersediaan ?? '-')); ?></strong>
                     </div>
                     <div class="kader-info-item">
                         <span>Pengalaman TB</span>
-                        <strong>{{ str_replace('_', ' ', $kader->pengalaman_tb ?? '-') }}</strong>
+                        <strong><?php echo e(str_replace('_', ' ', $kader->pengalaman_tb ?? '-')); ?></strong>
                     </div>
                     <div class="kader-info-item">
                         <span>Tanggal Daftar</span>
-                        <strong>{{ optional($kader->created_at)->format('d M Y H:i') ?? '-' }}</strong>
+                        <strong><?php echo e(optional($kader->created_at)->format('d M Y H:i') ?? '-'); ?></strong>
                     </div>
                     <div class="kader-info-item is-wide">
                         <span>Alamat</span>
-                        <p>{{ $kader->alamat ?? '-' }}</p>
-                        <p class="mt-1 text-muted">{{ $kader->kecamatan ?? '-' }}, {{ $kader->kab_kota ?? '-' }},
-                            {{ $kader->provinsi ?? '-' }}</p>
+                        <p><?php echo e($kader->alamat ?? '-'); ?></p>
+                        <p class="mt-1 text-muted"><?php echo e($kader->kecamatan ?? '-'); ?>, <?php echo e($kader->kab_kota ?? '-'); ?>,
+                            <?php echo e($kader->provinsi ?? '-'); ?></p>
                     </div>
                     <div class="kader-info-item is-wide">
                         <span>Motivasi</span>
-                        <p>{{ $kader->motivasi ?? '-' }}</p>
+                        <p><?php echo e($kader->motivasi ?? '-'); ?></p>
                     </div>
 
-                    @if ($kader->isRejected())
+                    <?php if($kader->isRejected()): ?>
                         <div class="kader-info-item is-wide">
                             <span>Alasan Penolakan</span>
-                            <p>{{ $kader->rejection_reason ?? '-' }}</p>
+                            <p><?php echo e($kader->rejection_reason ?? '-'); ?></p>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
@@ -464,12 +463,12 @@
                 <h2>Aksi Verifikasi</h2>
             </div>
             <div class="kader-card-body">
-                @if ($kader->isPending())
+                <?php if($kader->isPending()): ?>
                     <div class="kader-action-stack">
 
-                        <form method="POST" action="{{ route('admin.kaders.approve', $kader) }}"
+                        <form method="POST" action="<?php echo e(route('admin.kaders.approve', $kader)); ?>"
                             onsubmit="return confirm('Setujui pendaftaran kader ini?')">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="btn btn-success w-100 kader-action-button">
                                 <i class="bi bi-check2-circle"></i>
                                 <span>Approve Kader</span>
@@ -482,39 +481,39 @@
                             <span>Reject Kader</span>
                         </button>
                     </div>
-                @else
+                <?php else: ?>
                     <div class="kader-action-stack">
 
-                        @if ($kader->isActive())
+                        <?php if($kader->isActive()): ?>
                             <div class="kader-info-item">
                                 <span>Disetujui Pada</span>
-                                <strong>{{ optional($kader->approved_at)->format('d M Y H:i') ?? '-' }}</strong>
+                                <strong><?php echo e(optional($kader->approved_at)->format('d M Y H:i') ?? '-'); ?></strong>
                             </div>
                             <div class="kader-info-item">
                                 <span>Akun User</span>
-                                <strong>{{ $kader->user?->email ?? '-' }}</strong>
+                                <strong><?php echo e($kader->user?->email ?? '-'); ?></strong>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
-                        @if ($kader->isRejected())
+                        <?php if($kader->isRejected()): ?>
                             <div class="kader-info-item">
                                 <span>Ditolak Pada</span>
-                                <strong>{{ optional($kader->rejected_at)->format('d M Y H:i') ?? '-' }}</strong>
+                                <strong><?php echo e(optional($kader->rejected_at)->format('d M Y H:i') ?? '-'); ?></strong>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
-                @endif
+                <?php endif; ?>
             </div>
         </aside>
     </div>
 
-    @if ($kader->isPending())
+    <?php if($kader->isPending()): ?>
         <div class="modal fade kader-modal" id="rejectKaderModal" tabindex="-1" aria-labelledby="rejectKaderModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form method="POST" action="{{ route('admin.kaders.reject', $kader) }}">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('admin.kaders.reject', $kader)); ?>">
+                        <?php echo csrf_field(); ?>
 
                         <div class="modal-header">
                             <div class="kader-modal-title">
@@ -527,7 +526,7 @@
                             <div class="kader-form-group">
                                 <label>Alasan Penolakan</label>
                                 <textarea name="rejection_reason" rows="5" class="form-control" required maxlength="1000"
-                                    placeholder="Contoh: Data NIK belum sesuai atau wilayah domisili belum masuk cakupan program.">{{ old('rejection_reason') }}</textarea>
+                                    placeholder="Contoh: Data NIK belum sesuai atau wilayah domisili belum masuk cakupan program."><?php echo e(old('rejection_reason')); ?></textarea>
                             </div>
                         </div>
 
@@ -540,5 +539,7 @@
                 </div>
             </div>
         </div>
-    @endif
-@endsection
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Punya Aska\Kulyeah\SEMESTER 6\KP\Project-KP\resources\views/admin/kaders/show.blade.php ENDPATH**/ ?>

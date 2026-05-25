@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@push('styles')
+<?php $__env->startPush('styles'); ?>
     <style>
         .kaders-page-header {
             display: flex;
@@ -377,9 +375,9 @@
             }
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="kaders-page-header">
         <div class="kaders-page-title">
             <span>Manajemen</span>
@@ -387,39 +385,39 @@
         </div>
     </section>
 
-    @if (session('status'))
+    <?php if(session('status')): ?>
         <div class="alert kaders-alert kaders-alert-success mb-3">
             <i class="bi bi-check-circle-fill"></i>
-            <span>{{ session('status') }}</span>
+            <span><?php echo e(session('status')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    @if ($errors->any())
+    <?php if($errors->any()): ?>
         <div class="alert kaders-alert kaders-alert-danger mb-3">
             <i class="bi bi-exclamation-triangle-fill"></i>
             <div>
                 <strong>Proses belum bisa dilanjutkan.</strong>
                 <ul class="mb-0 mt-2">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
         </div>
-    @endif
+    <?php endif; ?>
 
     <section class="kaders-filter-card">
         <div class="kaders-filter-list">
-            <a href="{{ route('admin.kaders.index') }}"
-                class="kaders-filter-pill {{ blank($activeStatus) ? 'is-active' : '' }}">
-                Semua <strong>{{ $kaders->count() }}</strong>
+            <a href="<?php echo e(route('admin.kaders.index')); ?>"
+                class="kaders-filter-pill <?php echo e(blank($activeStatus) ? 'is-active' : ''); ?>">
+                Semua <strong><?php echo e($kaders->count()); ?></strong>
             </a>
-            @foreach ($statusOptions as $value => $label)
-                <a href="{{ route('admin.kaders.index', ['status' => $value]) }}"
-                    class="kaders-filter-pill {{ $activeStatus === $value ? 'is-active' : '' }}">
-                    {{ $label }} <strong>{{ $statusCounts[$value] ?? 0 }}</strong>
+            <?php $__currentLoopData = $statusOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <a href="<?php echo e(route('admin.kaders.index', ['status' => $value])); ?>"
+                    class="kaders-filter-pill <?php echo e($activeStatus === $value ? 'is-active' : ''); ?>">
+                    <?php echo e($label); ?> <strong><?php echo e($statusCounts[$value] ?? 0); ?></strong>
                 </a>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     </section>
 
@@ -427,7 +425,7 @@
         <div class="kaders-table-header">
             <div>
                 <h2>Daftar Kader</h2>
-                <p>Total data pada filter ini: {{ $kaders->count() }}</p>
+                <p>Total data pada filter ini: <?php echo e($kaders->count()); ?></p>
             </div>
 
             <div class="kaders-search-box">
@@ -449,8 +447,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($kaders as $kader)
-                        @php
+                    <?php $__currentLoopData = $kaders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kader): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
                             $initial = strtoupper(substr($kader->nama ?? 'K', 0, 1));
                             $statusClass = match ($kader->status) {
                                 \App\Models\Kader::STATUS_AKTIF => 'is-active',
@@ -458,52 +456,53 @@
                                 \App\Models\Kader::STATUS_SUSPEND => 'is-suspend',
                                 default => 'is-pending',
                             };
-                        @endphp
+                        ?>
                         <tr>
                             <td>
                                 <div class="kader-profile-cell">
-                                    <span class="kader-avatar">{{ $initial }}</span>
+                                    <span class="kader-avatar"><?php echo e($initial); ?></span>
                                     <div>
-                                        <strong>{{ $kader->nama }}</strong>
-                                        <small>NIK: {{ $kader->nik ?? '-' }}</small>
+                                        <strong><?php echo e($kader->nama); ?></strong>
+                                        <small>NIK: <?php echo e($kader->nik ?? '-'); ?></small>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div class="kader-muted-text">{{ $kader->email ?? '-' }}</div>
-                                <div class="kader-muted-text">{{ $kader->hp ?? '-' }}</div>
+                                <div class="kader-muted-text"><?php echo e($kader->email ?? '-'); ?></div>
+                                <div class="kader-muted-text"><?php echo e($kader->hp ?? '-'); ?></div>
                             </td>
                             <td>
                                 <div class="kader-location-cell">
-                                    <strong>{{ $kader->kab_kota ?? '-' }}</strong>
-                                    <small>{{ $kader->kecamatan ?? '-' }}{{ $kader->provinsi ? ', ' . $kader->provinsi : '' }}</small>
+                                    <strong><?php echo e($kader->kab_kota ?? '-'); ?></strong>
+                                    <small><?php echo e($kader->kecamatan ?? '-'); ?><?php echo e($kader->provinsi ? ', ' . $kader->provinsi : ''); ?></small>
                                 </div>
                             </td>
-                            <td data-search="{{ $kader->statusLabel() }}" data-order="{{ $kader->statusLabel() }}">
-                                <span class="kader-status-pill {{ $statusClass }}">
-                                    <span></span>{{ $kader->statusLabel() }}
+                            <td data-search="<?php echo e($kader->statusLabel()); ?>" data-order="<?php echo e($kader->statusLabel()); ?>">
+                                <span class="kader-status-pill <?php echo e($statusClass); ?>">
+                                    <span></span><?php echo e($kader->statusLabel()); ?>
+
                                 </span>
                             </td>
-                            <td data-order="{{ optional($kader->created_at)->timestamp }}">
-                                <span class="kader-date">{{ optional($kader->created_at)->format('d M Y') ?? '-' }}</span>
+                            <td data-order="<?php echo e(optional($kader->created_at)->timestamp); ?>">
+                                <span class="kader-date"><?php echo e(optional($kader->created_at)->format('d M Y') ?? '-'); ?></span>
                             </td>
                             <td>
                                 <div class="kaders-actions">
-                                    <a href="{{ route('admin.kaders.show', $kader) }}" class="kaders-icon-button"
+                                    <a href="<?php echo e(route('admin.kaders.show', $kader)); ?>" class="kaders-icon-button"
                                         title="Lihat detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             initAdminDataTable('#kaders-table', {
@@ -512,4 +511,6 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Punya Aska\Kulyeah\SEMESTER 6\KP\Project-KP\resources\views/admin/kaders/index.blade.php ENDPATH**/ ?>
