@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             KlinikSeeder::class,
             ScoringRuleSeeder::class,
+            ArtikelSeeder::class,
         ]);
     }
 }

@@ -372,6 +372,38 @@
         </div>
     @endif
 
+    @if (session('set_password_url'))
+    <div class="alert kader-alert kader-alert-success mb-3">
+        <i class="bi bi-link-45deg"></i>
+
+        <div style="width: 100%;">
+                <strong>Link set password kader:</strong>
+
+                <div class="mt-2 d-flex gap-2 flex-wrap">
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ session('set_password_url') }}"
+                        readonly
+                        onclick="this.select()"
+                    >
+
+                    <a
+                        href="{{ session('set_password_url') }}"
+                        target="_blank"
+                        class="btn btn-success"
+                    >
+                        Buka Link
+                    </a>
+                </div>
+
+                <small class="d-block mt-2">
+                    Karena email masih memakai mode log, gunakan link ini untuk membuat password kader.
+                </small>
+            </div>
+        </div>
+    @endif
+
     @if ($errors->any())
         <div class="alert kader-alert kader-alert-danger mb-3">
             <i class="bi bi-exclamation-triangle-fill"></i>

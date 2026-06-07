@@ -43,14 +43,15 @@
             <a href="{{ route('admin.kegiatan-sosial.index') }}"
                 class="admin-nav-link {{ request()->routeIs('admin.kegiatan-sosial.*') ? 'active' : '' }}">
                 <i class="bi bi-calendar-event-fill"></i>
-                <span>Kegiatan Sosial</span>
+                <span>Jadwal Sosialisasi</span>
             </a>
         </nav>
     </div>
 
     <div class="admin-sidebar-footer">
-        <form method="POST" action="{{ route('admin.logout') }}">
+        <form method="POST" action="{{ route('admin.logout') }}" class="js-confirm-logout">
             @csrf
+
             <button type="submit" class="admin-nav-link admin-logout-button">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Logout</span>

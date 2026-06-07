@@ -19,6 +19,8 @@ class KegiatanSosialController extends Controller
      */
     public function index(Request $request)
     {
+        $keyword = $request->input('search') ?? $request->input('q');
+
         $query = KegiatanSosial::with(['creator', 'ringkasan', 'kaders'])
             ->latest('tanggal');
 
@@ -26,10 +28,11 @@ class KegiatanSosialController extends Controller
             $query->where('status', $request->status);
         }
 
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('judul', 'like', '%' . $request->search . '%')
-                    ->orWhere('lokasi', 'like', '%' . $request->search . '%');
+        if (! empty($keyword)) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('judul', 'like', '%' . $keyword . '%')
+                    ->orWhere('lokasi', 'like', '%' . $keyword . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $keyword . '%');
             });
         }
 
@@ -84,6 +87,16 @@ class KegiatanSosialController extends Controller
             'materi.*.judul' => 'required_with:materi|string|max:255',
             'materi.*.konten' => 'nullable|string',
             'materi.*.urutan' => 'nullable|integer',
+        ], [
+            'judul.required' => 'Judul kegiatan wajib diisi.',
+            'tanggal.required' => 'Tanggal kegiatan wajib diisi.',
+            'tanggal.after_or_equal' => 'Tanggal kegiatan tidak boleh sebelum hari ini.',
+            'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.',
+            'lokasi.required' => 'Lokasi kegiatan wajib diisi.',
+            'deskripsi.required' => 'Deskripsi kegiatan wajib diisi.',
+            'banner.image' => 'Banner harus berupa file gambar.',
+            'banner.max' => 'Ukuran banner maksimal 2MB.',
+            'status.required' => 'Status kegiatan wajib dipilih.',
         ]);
 
         DB::beginTransaction();
@@ -100,22 +113,28 @@ class KegiatanSosialController extends Controller
             }
 
             $kegiatanData = Arr::except($validated, ['kader_ids', 'peran_kader', 'materi']);
+
             $kegiatan = KegiatanSosial::create($kegiatanData);
 
-            $this->syncKaders($kegiatan, $validated['kader_ids'] ?? [], $request->input('peran_kader', []));
+            $this->syncKaders(
+                $kegiatan,
+                $validated['kader_ids'] ?? [],
+                $request->input('peran_kader', [])
+            );
+
             $this->syncMateri($kegiatan, $validated['materi'] ?? []);
 
             DB::commit();
 
             return redirect()
                 ->route('admin.kegiatan-sosial.index')
-                ->with('success', 'Kegiatan sosial berhasil dibuat.');
+                ->with('success', 'Jadwal sosialisasi berhasil ditambahkan.');
         } catch (\Throwable $e) {
             DB::rollBack();
 
             return back()
                 ->withInput()
-                ->with('error', 'Gagal menyimpan: ' . $e->getMessage());
+                ->with('error', 'Gagal menambahkan jadwal sosialisasi. ' . $e->getMessage());
         }
     }
 
@@ -150,7 +169,12 @@ class KegiatanSosialController extends Controller
         $selectedKaderIds = $kegiatan->kaders->pluck('id')->toArray();
         $materiDefault = [];
 
-        return view('admin.kegiatan.create', compact('kegiatan', 'kaders', 'selectedKaderIds', 'materiDefault'));
+        return view('admin.kegiatan.create', compact(
+            'kegiatan',
+            'kaders',
+            'selectedKaderIds',
+            'materiDefault'
+        ));
     }
 
     /**
@@ -176,6 +200,15 @@ class KegiatanSosialController extends Controller
             'materi.*.judul' => 'required_with:materi|string|max:255',
             'materi.*.konten' => 'nullable|string',
             'materi.*.urutan' => 'nullable|integer',
+        ], [
+            'judul.required' => 'Judul kegiatan wajib diisi.',
+            'tanggal.required' => 'Tanggal kegiatan wajib diisi.',
+            'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.',
+            'lokasi.required' => 'Lokasi kegiatan wajib diisi.',
+            'deskripsi.required' => 'Deskripsi kegiatan wajib diisi.',
+            'banner.image' => 'Banner harus berupa file gambar.',
+            'banner.max' => 'Ukuran banner maksimal 2MB.',
+            'status.required' => 'Status kegiatan wajib dipilih.',
         ]);
 
         DB::beginTransaction();
@@ -189,14 +222,19 @@ class KegiatanSosialController extends Controller
                 $validated['banner'] = $request->file('banner')->store('kegiatan/banner', 'public');
             }
 
-            if ($validated['status'] === 'published' && !$kegiatan->published_at) {
+            if ($validated['status'] === 'published' && ! $kegiatan->published_at) {
                 $validated['published_at'] = now();
             }
 
             $kegiatanData = Arr::except($validated, ['kader_ids', 'peran_kader', 'materi']);
+
             $kegiatan->update($kegiatanData);
 
-            $this->syncKaders($kegiatan, $validated['kader_ids'] ?? [], $request->input('peran_kader', []));
+            $this->syncKaders(
+                $kegiatan,
+                $validated['kader_ids'] ?? [],
+                $request->input('peran_kader', [])
+            );
 
             if (array_key_exists('materi', $validated)) {
                 $kegiatan->materi()->delete();
@@ -207,13 +245,13 @@ class KegiatanSosialController extends Controller
 
             return redirect()
                 ->route('admin.kegiatan-sosial.show', $kegiatan)
-                ->with('success', 'Kegiatan berhasil diperbarui.');
+                ->with('success', 'Jadwal sosialisasi berhasil diperbarui.');
         } catch (\Throwable $e) {
             DB::rollBack();
 
             return back()
                 ->withInput()
-                ->with('error', 'Gagal memperbarui: ' . $e->getMessage());
+                ->with('error', 'Gagal memperbarui jadwal sosialisasi. ' . $e->getMessage());
         }
     }
 
@@ -222,11 +260,20 @@ class KegiatanSosialController extends Controller
      */
     public function destroy(KegiatanSosial $kegiatan)
     {
-        $kegiatan->delete();
+        try {
+            if ($kegiatan->banner) {
+                Storage::disk('public')->delete($kegiatan->banner);
+            }
 
-        return redirect()
-            ->route('admin.kegiatan-sosial.index')
-            ->with('success', 'Kegiatan berhasil dihapus.');
+            $kegiatan->delete();
+
+            return redirect()
+                ->route('admin.kegiatan-sosial.index')
+                ->with('success', 'Jadwal sosialisasi berhasil dihapus.');
+        } catch (\Throwable $e) {
+            return back()
+                ->with('error', 'Gagal menghapus jadwal sosialisasi. ' . $e->getMessage());
+        }
     }
 
     /**
@@ -237,21 +284,34 @@ class KegiatanSosialController extends Controller
         $request->validate([
             'foto' => 'required|image|mimes:jpg,jpeg,png,webp|max:3072',
             'caption' => 'nullable|string|max:255',
+        ], [
+            'foto.required' => 'Foto dokumentasi wajib dipilih.',
+            'foto.image' => 'File dokumentasi harus berupa gambar.',
+            'foto.max' => 'Ukuran foto dokumentasi maksimal 3MB.',
         ]);
 
-        $path = $request->file('foto')->store('kegiatan/dokumentasi', 'public');
-        $urutan = ((int) $kegiatan->dokumentasi()->max('urutan')) + 1;
+        try {
+            $path = $request->file('foto')->store('kegiatan/dokumentasi', 'public');
+            $urutan = ((int) $kegiatan->dokumentasi()->max('urutan')) + 1;
 
-        $dok = $kegiatan->dokumentasi()->create([
-            'file_path' => $path,
-            'caption' => $request->caption,
-            'urutan' => $urutan,
-        ]);
+            $dok = $kegiatan->dokumentasi()->create([
+                'file_path' => $path,
+                'caption' => $request->caption,
+                'urutan' => $urutan,
+            ]);
 
-        return response()->json([
-            'id' => $dok->id,
-            'url' => $dok->url,
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Dokumentasi kegiatan berhasil diunggah.',
+                'id' => $dok->id,
+                'url' => $dok->url,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengunggah dokumentasi. ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -259,10 +319,20 @@ class KegiatanSosialController extends Controller
      */
     public function deleteDokumentasi(DokumentasiKegiatan $dokumentasi)
     {
-        Storage::disk('public')->delete($dokumentasi->file_path);
-        $dokumentasi->delete();
+        try {
+            Storage::disk('public')->delete($dokumentasi->file_path);
+            $dokumentasi->delete();
 
-        return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Dokumentasi kegiatan berhasil dihapus.',
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus dokumentasi. ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -275,18 +345,29 @@ class KegiatanSosialController extends Controller
             'jumlah_kader' => 'required|integer|min:0',
             'jumlah_materi' => 'required|integer|min:0',
             'catatan_internal' => 'nullable|string',
+        ], [
+            'jumlah_peserta.required' => 'Jumlah peserta wajib diisi.',
+            'jumlah_kader.required' => 'Jumlah kader wajib diisi.',
+            'jumlah_materi.required' => 'Jumlah materi wajib diisi.',
         ]);
 
-        $validated['diisi_oleh'] = auth()->id();
+        try {
+            $validated['diisi_oleh'] = auth()->id();
 
-        $kegiatan->ringkasan()->updateOrCreate(
-            ['kegiatan_id' => $kegiatan->id],
-            $validated
-        );
+            $kegiatan->ringkasan()->updateOrCreate(
+                ['kegiatan_id' => $kegiatan->id],
+                $validated
+            );
 
-        $kegiatan->update(['status' => 'completed']);
+            $kegiatan->update(['status' => 'completed']);
 
-        return back()->with('success', 'Ringkasan kegiatan berhasil disimpan.');
+            return back()
+                ->with('success', 'Ringkasan kegiatan berhasil disimpan.');
+        } catch (\Throwable $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Gagal menyimpan ringkasan kegiatan. ' . $e->getMessage());
+        }
     }
 
     /**
@@ -296,17 +377,25 @@ class KegiatanSosialController extends Controller
     {
         $request->validate([
             'status' => ['required', Rule::in(['draft', 'published', 'ongoing', 'completed', 'cancelled'])],
+        ], [
+            'status.required' => 'Status kegiatan wajib dipilih.',
         ]);
 
-        $data = ['status' => $request->status];
+        try {
+            $data = ['status' => $request->status];
 
-        if ($request->status === 'published' && !$kegiatan->published_at) {
-            $data['published_at'] = now();
+            if ($request->status === 'published' && ! $kegiatan->published_at) {
+                $data['published_at'] = now();
+            }
+
+            $kegiatan->update($data);
+
+            return back()
+                ->with('success', 'Status kegiatan berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            return back()
+                ->with('error', 'Gagal memperbarui status kegiatan. ' . $e->getMessage());
         }
-
-        $kegiatan->update($data);
-
-        return back()->with('success', 'Status kegiatan diperbarui.');
     }
 
     private function syncKaders(KegiatanSosial $kegiatan, array $kaderIds, array $peranKader = []): void
@@ -325,7 +414,7 @@ class KegiatanSosialController extends Controller
     private function syncMateri(KegiatanSosial $kegiatan, array $materi): void
     {
         foreach ($materi as $i => $m) {
-            if (!empty($m['judul'])) {
+            if (! empty($m['judul'])) {
                 $kegiatan->materi()->create([
                     'judul' => $m['judul'],
                     'konten' => $m['konten'] ?? '',

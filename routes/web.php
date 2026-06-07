@@ -12,14 +12,16 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\KegiatanSosialController;
 use App\Http\Controllers\Admin\KegiatanSosialController as AdminKegiatanSosialController;
+use App\Http\Controllers\Kader\AuthController as KaderAuthController;
+use App\Http\Controllers\Kader\DashboardController as KaderDashboardController;
+use App\Http\Controllers\Kader\ScreeningController as KaderScreeningController;
+use App\Http\Controllers\Kader\RiwayatScreeningController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::middleware('guest:web')->group(function () {
-        Route::get('/login', [LoginController::class, 'create'])->name('login');
-        Route::post('/login', [LoginController::class, 'store'])->name('login.submit');
-    });
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.submit');
 
-    Route::middleware(['auth:web', 'role:super_admin'])->group(function () {
+    Route::middleware(['role:super_admin'])->group(function () {
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -62,6 +64,48 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Kader Web Dashboard Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('kader')->name('kader.')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('kader.login');
+    })->name('index');
+
+    Route::get('/login', [KaderAuthController::class, 'create'])->name('login');
+    Route::post('/login', [KaderAuthController::class, 'store'])->name('login.submit');
+
+    Route::post('/logout', [KaderAuthController::class, 'destroy'])
+        ->middleware('role:kader')
+        ->name('logout');
+
+    Route::middleware(['role:kader'])->group(function () {
+        Route::get('/dashboard', [KaderDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/jadwal', [KaderDashboardController::class, 'jadwal'])->name('jadwal.index');
+        Route::get('/riwayat-jadwal', [RiwayatScreeningController::class, 'riwayatJadwal'])->name('riwayat-jadwal.index');
+
+        Route::get('/riwayat-screening', [RiwayatScreeningController::class, 'index'])->name('riwayat-screening.index');
+        Route::get('/riwayat-screening/{kegiatan}', [RiwayatScreeningController::class, 'show'])->name('riwayat-screening.show');
+
+        Route::get('/kegiatan/{kegiatan}', [KaderDashboardController::class, 'showKegiatan'])->name('kegiatan.show');
+
+        Route::get('/kegiatan/{kegiatan}/screening', [KaderScreeningController::class, 'create'])->name('screening.create');
+        Route::post('/kegiatan/{kegiatan}/screening', [KaderScreeningController::class, 'store'])->name('screening.store');
+
+        Route::post('/screening-session/{session}/close', [KaderScreeningController::class, 'closeSession'])->name('screening.close');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/tentang-kami', [PageController::class, 'tentangKami'])->name('about');

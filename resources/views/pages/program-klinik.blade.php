@@ -1,78 +1,94 @@
-@extends('layouts.guest')
+@extends('layouts.app')
 
 @section('title', 'Program Klinik – Stop TB Partnership Indonesia')
 
 @push('styles')
-    {{-- Tidak perlu style tambahan, sudah di main.css --}}
+    <link href="{{ asset('css/program-klinik.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
 
-    {{-- ═══════════════════════════════ HERO ═══════════════════════════════ --}}
+    {{-- HERO --}}
     <section class="klinik-hero">
         <div class="container-xl px-4 px-lg-5">
+
+            <nav class="pk-breadcrumb">
+                <a href="{{ route('home') }}">Home</a>
+                <i class="bi bi-chevron-right"></i>
+                <span>Program Klinik</span>
+            </nav>
+
             <div class="klinik-hero-inner">
-                <div>
+                <div class="klinik-hero-content">
+
                     <span class="section-tag-pill">Program Klinik</span>
+
                     <h1 class="klinik-hero-title">
-                        Temukan <span>Klinik TBC</span><br>
+                        Temukan <span><i>Klinik TBC</i></span><br>
                         di Seluruh Indonesia
                     </h1>
+
                     <p class="klinik-hero-desc">
                         Jaringan fasilitas kesehatan mitra Stop TB Partnership Indonesia
                         yang siap melayani diagnosis dan pengobatan tuberkulosis.
                     </p>
-                </div>
 
-                <div class="klinik-stats-box">
-                    <div class="text-center">
-                        <div class="klinik-stat-num">{{ $stats['total'] }}+</div>
-                        <div class="klinik-stat-label">Klinik Mitra</div>
+                    <div class="klinik-stats-box">
+                        <div class="text-center">
+                            <div class="klinik-stat-num">{{ $stats['total'] }}+</div>
+                            <div class="klinik-stat-label">Klinik Mitra</div>
+                        </div>
+
+                        <div class="klinik-stat-divider"></div>
+
+                        <div class="text-center">
+                            <div class="klinik-stat-num">{{ $stats['kota'] }}</div>
+                            <div class="klinik-stat-label">Kota / Kab.</div>
+                        </div>
+
+                        <div class="klinik-stat-divider"></div>
+
+                        <div class="text-center">
+                            <div class="klinik-stat-num">{{ $stats['provinsi'] }}</div>
+                            <div class="klinik-stat-label">Provinsi</div>
+                        </div>
                     </div>
-                    <div class="klinik-stat-divider"></div>
-                    <div class="text-center">
-                        <div class="klinik-stat-num">{{ $stats['kota'] }}</div>
-                        <div class="klinik-stat-label">Kota / Kab.</div>
-                    </div>
-                    <div class="klinik-stat-divider"></div>
-                    <div class="text-center">
-                        <div class="klinik-stat-num">{{ $stats['provinsi'] }}</div>
-                        <div class="klinik-stat-label">Provinsi</div>
-                    </div>
+
+                    <a href="{{ route('klinik-terdekat') }}" class="gps-banner text-decoration-none">
+                        <div class="gps-banner-icon">
+                            <div class="gps-pulse"></div>
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+
+                        <div class="gps-banner-text">
+                            <strong>Klinik Terdekat dari Lokasi Anda</strong>
+                            <span>Aktifkan GPS untuk temukan klinik TBC paling dekat secara otomatis</span>
+                        </div>
+
+                        <div class="gps-banner-arrow">
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                    </a>
+
                 </div>
             </div>
+
         </div>
     </section>
 
-    {{-- ═══════════════════════════════ MAIN ═══════════════════════════════ --}}
+    {{-- MAIN --}}
     <section class="py-5">
         <div class="container-xl px-4 px-lg-5">
 
-            {{-- GPS Banner --}}
-            <a href="{{ route('klinik-terdekat') }}" class="gps-banner text-decoration-none">
-                <div class="gps-banner-icon">
-                    <div class="gps-pulse"></div>
-                    <i class="bi bi-geo-alt-fill"></i>
-                </div>
-                <div class="gps-banner-text">
-                    <strong>Klinik Terdekat dari Lokasi Anda</strong>
-                    <span>Aktifkan GPS untuk temukan klinik TBC paling dekat secara otomatis</span>
-                </div>
-                <div class="gps-banner-arrow">
-                    <i class="bi bi-chevron-right"></i>
-                </div>
-            </a>
-
-            {{-- Search bar --}}
             <div class="filter-search-wrap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                 </svg>
+
                 <input type="text" id="searchKlinik" placeholder="Cari nama klinik atau alamat...">
             </div>
 
-            {{-- Filter chips --}}
             <div class="filter-chips">
                 <button class="filter-chip active" data-tipe="Semua">Semua</button>
                 <button class="filter-chip" data-tipe="Puskesmas">Puskesmas</button>
@@ -80,52 +96,77 @@
                 <button class="filter-chip" data-tipe="Klinik">Klinik</button>
             </div>
 
-            {{-- Result header --}}
             <div class="result-header">
                 <h2 class="result-title" id="resultCount">{{ count($klinik) }} Klinik Ditemukan</h2>
             </div>
+
             <div id="emptyKlinik" class="empty-klinik" style="display: none;">
                 <h5>Klinik tidak ditemukan</h5>
-                <p>Coba gunakan kata kunci lain....</p>
+                <p>Coba gunakan kata kunci lain.</p>
             </div>
 
-            {{-- Daftar klinik --}}
             <div class="klinik-list" id="klinikList">
                 @foreach($klinik as $k)
                     @php
-                        $layananStr = implode(',', $k['layanan']);
                         $mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($k['nama'] . ' ' . $k['alamat']);
                     @endphp
-                    <div class="klinik-card" data-tipe="{{ $k['tipe'] }}" data-nama="{{ strtolower($k['nama']) }}"
-                        data-alamat="{{ strtolower($k['alamat']) }}" data-kota="{{ strtolower($k['kota']) }}"
-                        data-buka="{{ $k['jam_buka'] }}" data-tutup="{{ $k['jam_tutup'] }}">
+
+                    <div
+                        class="klinik-card"
+                        data-tipe="{{ $k['tipe'] }}"
+                        data-nama="{{ strtolower($k['nama']) }}"
+                        data-alamat="{{ strtolower($k['alamat']) }}"
+                        data-kota="{{ strtolower($k['kota']) }}"
+                        data-buka="{{ $k['jam_buka'] }}"
+                        data-tutup="{{ $k['jam_tutup'] }}"
+                    >
                         <div class="klinik-card-body">
                             <div class="klinik-thumb">
-                                @if($k['tipe'] === 'RS Umum') 🏨
-                                @else 🏥
+                                @if($k['tipe'] === 'RS Umum')
+                                    🏨
+                                @else
+                                    🏥
                                 @endif
                             </div>
+
                             <div class="klinik-card-info">
                                 <h5 class="klinik-card-nama">{{ $k['nama'] }}</h5>
-                                <p class="klinik-card-tipe">{{ $k['tipe'] }} · {{ $k['kota'] }}</p>
-                                <p class="klinik-card-alamat">{{ $k['alamat'] }}</p>
+
+                                <p class="klinik-card-tipe">
+                                    {{ $k['tipe'] }} · {{ $k['kota'] }}
+                                </p>
+
+                                <p class="klinik-card-alamat">
+                                    {{ $k['alamat'] }}
+                                </p>
+
                                 <div class="klinik-jam-row">
-                                    <span class="jam-text">{{ $k['hari_buka'] }} ·
-                                        {{ $k['jam_buka'] }}–{{ $k['jam_tutup'] }}</span>
-                                    <span class="status-buka klinik-status" data-buka="{{ $k['jam_buka'] }}"
-                                        data-tutup="{{ $k['jam_tutup'] }}"></span>
+                                    <span class="jam-text">
+                                        {{ $k['hari_buka'] }} · {{ $k['jam_buka'] }}–{{ $k['jam_tutup'] }}
+                                    </span>
+
+                                    <span
+                                        class="klinik-status"
+                                        data-buka="{{ $k['jam_buka'] }}"
+                                        data-tutup="{{ $k['jam_tutup'] }}"
+                                    ></span>
                                 </div>
+
                                 <div class="layanan-tags">
                                     @foreach($k['layanan'] as $l)
                                         <span class="layanan-tag">{{ $l }}</span>
                                     @endforeach
                                 </div>
+
                                 <div class="klinik-aksi">
                                     <a href="tel:{{ $k['telepon'] }}" class="btn-hubungi">
-                                        <i class="bi bi-telephone-fill"></i> Hubungi
+                                        <i class="bi bi-telephone-fill"></i>
+                                        Hubungi
                                     </a>
+
                                     <a href="{{ $mapsUrl }}" target="_blank" rel="noopener" class="btn-maps">
-                                        <i class="bi bi-map-fill"></i> Buka di Google Maps
+                                        <i class="bi bi-map-fill"></i>
+                                        Buka di Google Maps
                                     </a>
                                 </div>
                             </div>
@@ -134,7 +175,6 @@
                 @endforeach
             </div>
 
-            {{-- Empty state --}}
             <div id="emptyState" class="state-center" style="display:none;">
                 <div style="font-size:44px">🔍</div>
                 <h4>Tidak ada klinik ditemukan</h4>
@@ -149,111 +189,121 @@
 
 @push('scripts')
     <script>
-        // ── Cek status buka/tutup ─────────────────────────────────────────────────
-        function cekBuka(jamBuka, jamTutup) {
-            const now = new Date();
-            const mnt = now.getHours() * 60 + now.getMinutes();
-            const [bH, bM] = jamBuka.split(':').map(Number);
-            const [tH, tM] = jamTutup.split(':').map(Number);
-            return mnt >= bH * 60 + bM && mnt <= tH * 60 + tM;
-        }
-
-        // Set status buka/tutup semua kartu
-        document.querySelectorAll('.klinik-status').forEach(el => {
-            const buka = el.dataset.buka, tutup = el.dataset.tutup;
-            if (cekBuka(buka, tutup)) {
-                el.textContent = '● Buka';
-                el.className = 'status-buka klinik-status';
-            } else {
-                el.textContent = '● Tutup';
-                el.className = 'status-tutup klinik-status';
-            }
-        });
-
-        // ── Filter logic ─────────────────────────────────────────────────────────
-        let activeFilter = 'Semua';
-        let activeSearch = '';
-        let filterBuka = false;
-
-        function applyFilter() {
-            const cards = document.querySelectorAll('#klinikList .klinik-card');
-            let visible = 0;
-            cards.forEach(card => {
-                const matchTipe = activeFilter === 'Semua' || card.dataset.tipe === activeFilter;
-                const matchSearch = !activeSearch ||
-                    card.dataset.nama.includes(activeSearch) ||
-                    card.dataset.alamat.includes(activeSearch) ||
-                    card.dataset.kota.includes(activeSearch);
-                const matchBuka = !filterBuka || cekBuka(card.dataset.buka, card.dataset.tutup);
-                const show = matchTipe && matchSearch && matchBuka;
-                card.style.display = show ? '' : 'none';
-                if (show) visible++;
-            });
-            document.getElementById('resultCount').textContent = visible + ' Klinik Ditemukan';
-            document.getElementById('emptyState').style.display = visible === 0 ? 'flex' : 'none';
-            document.getElementById('klinikList').style.display = visible === 0 ? 'none' : '';
-        }
-
-        // Filter chips
-        document.querySelectorAll('.filter-chip[data-tipe]').forEach(btn => {
-            btn.addEventListener('click', function () {
-                document.querySelectorAll('.filter-chip[data-tipe]').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                activeFilter = this.dataset.tipe;
-                applyFilter();
-            });
-        });
-
-
-        // Search
-        document.getElementById('searchInput').addEventListener('input', function () {
-            activeSearch = this.value.toLowerCase().trim();
-            applyFilter();
-        });
-
-        function resetFilter() {
-            activeFilter = 'Semua'; activeSearch = ''; filterBuka = false;
-            document.getElementById('searchInput').value = '';
-            document.querySelectorAll('.filter-chip[data-tipe]').forEach(b => b.classList.remove('active'));
-            document.querySelector('.filter-chip[data-tipe="Semua"]').classList.add('active');
-            btnBuka.classList.remove('active');
-            applyFilter();
-        }
-    </script>
-
-    <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchKlinik');
             const resultCount = document.getElementById('resultCount');
             const emptyKlinik = document.getElementById('emptyKlinik');
-            const cards = document.querySelectorAll('.klinik-card');
+            const emptyState = document.getElementById('emptyState');
+            const klinikList = document.getElementById('klinikList');
+            const cards = document.querySelectorAll('#klinikList .klinik-card');
+            const filterButtons = document.querySelectorAll('.filter-chip[data-tipe]');
 
-            if (!searchInput) return;
+            let activeFilter = 'Semua';
+            let activeSearch = '';
 
-            searchInput.addEventListener('input', function () {
-                const keyword = this.value.toLowerCase().trim();
-                let visibleCount = 0;
+            function cekBuka(jamBuka, jamTutup) {
+                if (!jamBuka || !jamTutup) return false;
 
-                cards.forEach(card => {
-                    const text = card.textContent.toLowerCase();
+                const now = new Date();
+                const menitSekarang = now.getHours() * 60 + now.getMinutes();
 
-                    if (text.includes(keyword)) {
-                        card.style.display = '';
-                        visibleCount++;
+                const [bukaJam, bukaMenit] = jamBuka.split(':').map(Number);
+                const [tutupJam, tutupMenit] = jamTutup.split(':').map(Number);
+
+                return menitSekarang >= (bukaJam * 60 + bukaMenit)
+                    && menitSekarang <= (tutupJam * 60 + tutupMenit);
+            }
+
+            function updateStatusKlinik() {
+                document.querySelectorAll('.klinik-status').forEach(function (el) {
+                    const buka = el.dataset.buka;
+                    const tutup = el.dataset.tutup;
+
+                    if (cekBuka(buka, tutup)) {
+                        el.textContent = '● Buka';
+                        el.className = 'klinik-status status-buka';
                     } else {
-                        card.style.display = 'none';
+                        el.textContent = '● Tutup';
+                        el.className = 'klinik-status status-tutup';
                     }
                 });
+            }
 
-                resultCount.textContent = visibleCount + ' Klinik Ditemukan';
+            function applyFilter() {
+                let visible = 0;
 
-                if (visibleCount === 0) {
+                cards.forEach(function (card) {
+                    const matchTipe = activeFilter === 'Semua' || card.dataset.tipe === activeFilter;
+
+                    const matchSearch =
+                        !activeSearch ||
+                        card.dataset.nama.includes(activeSearch) ||
+                        card.dataset.alamat.includes(activeSearch) ||
+                        card.dataset.kota.includes(activeSearch) ||
+                        card.textContent.toLowerCase().includes(activeSearch);
+
+                    const show = matchTipe && matchSearch;
+
+                    card.style.display = show ? '' : 'none';
+
+                    if (show) visible++;
+                });
+
+                resultCount.textContent = visible + ' Klinik Ditemukan';
+
+                if (visible === 0) {
                     emptyKlinik.style.display = 'block';
+                    emptyState.style.display = 'flex';
+                    klinikList.style.display = 'none';
                 } else {
                     emptyKlinik.style.display = 'none';
+                    emptyState.style.display = 'none';
+                    klinikList.style.display = '';
                 }
+            }
+
+            filterButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    filterButtons.forEach(function (btn) {
+                        btn.classList.remove('active');
+                    });
+
+                    button.classList.add('active');
+                    activeFilter = button.dataset.tipe;
+                    applyFilter();
+                });
             });
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    activeSearch = this.value.toLowerCase().trim();
+                    applyFilter();
+                });
+            }
+
+            window.resetFilter = function () {
+                activeFilter = 'Semua';
+                activeSearch = '';
+
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+
+                filterButtons.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+
+                const semuaButton = document.querySelector('.filter-chip[data-tipe="Semua"]');
+
+                if (semuaButton) {
+                    semuaButton.classList.add('active');
+                }
+
+                applyFilter();
+            };
+
+            updateStatusKlinik();
+            applyFilter();
         });
     </script>
-
 @endpush

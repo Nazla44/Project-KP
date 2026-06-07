@@ -48,8 +48,14 @@ class Artikel extends Model
 
     public function getCoverImageUrlAttribute(): string
     {
-        if ($this->cover_image && Storage::disk('public')->exists($this->cover_image)) {
-            return asset(Storage::url($this->cover_image));
+        if ($this->cover_image) {
+            if (Storage::disk('public')->exists($this->cover_image)) {
+                return asset(Storage::url($this->cover_image));
+            }
+
+            if (file_exists(public_path($this->cover_image))) {
+                return asset($this->cover_image);
+            }
         }
 
         return asset('assets/image/news-1.png');
@@ -68,7 +74,7 @@ class Artikel extends Model
                 ->when($this->exists, fn ($query) => $query->whereKeyNot($this->getKey()))
                 ->exists()
         ) {
-            $slug = $original.'-'.$counter;
+            $slug = $original . '-' . $counter;
             $counter++;
         }
 

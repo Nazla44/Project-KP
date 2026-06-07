@@ -1,0 +1,723 @@
+:root {
+    --color-primary: #d50000;
+    --color-primary-dark: #9b0000;
+    --color-text: #1f1f1f;
+    --color-text-muted: #777777;
+    --color-text-light: #999999;
+    --color-border: #eeeeee;
+}
+
+/* HERO GLOBAL PROGRAM KLINIK */
+
+.klinik-hero {
+    position: relative;
+    min-height: 720px;
+    padding: 38px 0 72px;
+    background-image: url('/assets/image/program-klinik-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+}
+
+.klinik-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(13, 8, 10, 0.94) 0%,
+        rgba(35, 21, 25, 0.88) 42%,
+        rgba(58, 31, 36, 0.62) 72%,
+        rgba(44, 20, 25, 0.46) 100%
+    );
+    z-index: 1;
+}
+
+.klinik-hero::after {
+    content: "";
+    position: absolute;
+    left: -130px;
+    bottom: -150px;
+    width: 430px;
+    height: 430px;
+    border: 2px solid rgba(213, 0, 0, 0.45);
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.klinik-hero > * {
+    position: relative;
+    z-index: 3;
+}
+
+.klinik-hero .container-xl {
+    display: flex;
+    flex-direction: column;
+}
+
+.pk-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 36px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.76);
+}
+
+.pk-breadcrumb a {
+    color: rgba(255, 255, 255, 0.86);
+    text-decoration: none;
+}
+
+.pk-breadcrumb a:hover {
+    color: #ffffff;
+}
+
+.pk-breadcrumb i {
+    font-size: 11px;
+    opacity: 0.72;
+}
+
+.klinik-hero-inner {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.klinik-hero-content {
+    max-width: 760px;
+}
+
+.section-tag-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    height: 38px;
+    padding: 0 24px;
+    margin-bottom: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.klinik-hero-title {
+    margin: 0 0 24px;
+    color: #ffffff;
+    font-size: 70px;
+    font-weight: 300;
+    line-height: 1.28;
+    letter-spacing: 0.035em;
+}
+
+.klinik-hero-title span {
+    color: var(--color-primary);
+    font-weight: 300;
+}
+
+.klinik-hero-desc {
+    max-width: 600px;
+    margin: 0 0 32px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 16px;
+    line-height: 1.9;
+}
+
+/* STATS */
+
+.klinik-stats-box {
+    width: fit-content;
+    min-width: 360px;
+    padding: 22px 32px;
+    margin-bottom: 34px;
+    border-radius: 0 14px 14px 14px;
+    background: var(--color-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    box-shadow: 0 18px 42px rgba(213, 0, 0, 0.25);
+}
+
+.klinik-stat-num {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff;
+}
+
+.klinik-stat-label {
+    margin-top: 7px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.86);
+}
+
+.klinik-stat-divider {
+    width: 1px;
+    height: 46px;
+    background: rgba(255, 255, 255, 0.48);
+}
+
+/* GPS BANNER */
+
+.gps-banner {
+    width: min(100%, 620px);
+    padding: 18px 22px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--color-primary);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 18px 42px rgba(213, 0, 0, 0.26);
+    text-decoration: none;
+    position: relative;
+    z-index: 5;
+    transition: all 0.22s ease;
+}
+
+.gps-banner:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 22px 48px rgba(213, 0, 0, 0.34);
+    text-decoration: none;
+}
+
+.gps-banner-icon {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba(128, 2, 2, 0.78);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 21px;
+}
+
+.gps-pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    animation: gpsPulse 1.6s ease-out infinite;
+}
+
+@keyframes gpsPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1.75);
+        opacity: 0;
+    }
+}
+
+.gps-banner-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.gps-banner-text strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.gps-banner-text span {
+    display: block;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.gps-banner-arrow {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* MAIN */
+
+.filter-search-wrap {
+    width: 100%;
+    min-height: 56px;
+    padding: 0 20px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1.5px solid var(--color-border);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--color-text-muted);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.filter-search-wrap input {
+    width: 100%;
+    height: 54px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.filter-search-wrap input::placeholder {
+    color: #9b9b9b;
+}
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.filter-chip {
+    border: 1.5px solid var(--color-border);
+    background: #ffffff;
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.18s ease;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+    color: var(--color-primary);
+    background: rgba(213, 0, 0, 0.08);
+    border-color: var(--color-primary);
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.result-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.empty-klinik {
+    padding: 22px;
+    margin-bottom: 20px;
+    border: 1.5px dashed var(--color-border);
+    border-radius: 16px;
+    background: #fafafa;
+    text-align: center;
+}
+
+.empty-klinik h5 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.empty-klinik p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-text-muted);
+}
+
+/* CARD */
+
+.klinik-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.klinik-card {
+    background: #ffffff;
+    border: 1.5px solid var(--color-border);
+    border-radius: 18px;
+    padding: 18px 20px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    position: relative;
+}
+
+.klinik-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 26px rgba(213, 0, 0, 0.09);
+    transform: translateY(-1px);
+}
+
+.klinik-card-body {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.klinik-thumb {
+    width: 54px;
+    height: 54px;
+    background: rgba(213, 0, 0, 0.08);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.klinik-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.klinik-card-nama {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 4px;
+}
+
+.klinik-card-tipe {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin: 0 0 6px;
+}
+
+.klinik-card-alamat {
+    font-size: 13px;
+    color: var(--color-text-light);
+    margin: 0 0 10px;
+    line-height: 1.55;
+}
+
+.klinik-jam-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.jam-text {
+    font-size: 12px;
+    color: var(--color-text-light);
+}
+
+.status-buka {
+    font-size: 12px;
+    font-weight: 700;
+    color: #16a34a;
+}
+
+.status-tutup {
+    font-size: 12px;
+    font-weight: 700;
+    color: #dc2626;
+}
+
+.layanan-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.layanan-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(213, 0, 0, 0.08);
+    color: var(--color-primary);
+}
+
+.klinik-aksi {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-hubungi,
+.btn-maps {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: none;
+    border-radius: 9px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-hubungi:hover,
+.btn-maps:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+.btn-hubungi {
+    background: var(--color-primary);
+    color: #ffffff;
+}
+
+.btn-maps {
+    background: #f1f3f4;
+    color: var(--color-text);
+}
+
+.state-center {
+    text-align: center;
+    padding: 70px 20px;
+    color: var(--color-text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.state-center h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.state-center p {
+    font-size: 14px;
+    max-width: 420px;
+    margin: 0;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 991px) {
+    .klinik-hero {
+        min-height: 660px;
+        padding: 34px 0 64px;
+    }
+
+    .klinik-hero-title {
+        font-size: 58px;
+    }
+
+    .klinik-hero-content {
+        max-width: 680px;
+    }
+
+    .klinik-stats-box {
+        min-width: 340px;
+    }
+
+    .gps-banner {
+        width: min(100%, 600px);
+    }
+}
+
+@media (max-width: 768px) {
+    .klinik-hero {
+        min-height: 620px;
+        padding: 30px 0 58px;
+    }
+
+    .pk-breadcrumb {
+        margin-bottom: 30px;
+    }
+
+    .section-tag-pill {
+        margin-bottom: 28px;
+    }
+
+    .klinik-hero-title {
+        font-size: 46px;
+    }
+
+    .klinik-hero-desc {
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    .klinik-stats-box {
+        min-width: 0;
+        width: 100%;
+        max-width: 430px;
+        padding: 18px 22px;
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .klinik-stat-num {
+        font-size: 26px;
+    }
+
+    .gps-banner {
+        width: 100%;
+        max-width: 520px;
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .gps-banner-icon {
+        width: 46px;
+        height: 46px;
+        font-size: 19px;
+    }
+
+    .gps-banner-text strong {
+        font-size: 14px;
+    }
+
+    .gps-banner-text span {
+        font-size: 11px;
+    }
+
+    .klinik-card-body {
+        gap: 12px;
+    }
+
+    .klinik-thumb {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 576px) {
+    .klinik-hero {
+        min-height: 590px;
+        padding: 26px 0 50px;
+    }
+
+    .pk-breadcrumb {
+        font-size: 13px;
+        margin-bottom: 26px;
+    }
+
+    .section-tag-pill {
+        height: 34px;
+        min-width: 145px;
+        padding: 0 18px;
+        margin-bottom: 24px;
+        font-size: 10px;
+    }
+
+    .klinik-hero-title {
+        font-size: 36px;
+        line-height: 1.35;
+        margin-bottom: 20px;
+    }
+
+    .klinik-hero-desc {
+        font-size: 14px;
+        margin-bottom: 26px;
+    }
+
+    .klinik-stats-box {
+        padding: 16px;
+        gap: 14px;
+        border-radius: 0 12px 12px 12px;
+        margin-bottom: 24px;
+    }
+
+    .klinik-stat-num {
+        font-size: 22px;
+    }
+
+    .klinik-stat-label {
+        font-size: 10px;
+    }
+
+    .klinik-stat-divider {
+        height: 40px;
+    }
+
+    .gps-banner {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .gps-banner-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+
+    .gps-banner-arrow {
+        display: none;
+    }
+
+    .filter-search-wrap {
+        min-height: 52px;
+        padding: 0 16px;
+    }
+
+    .filter-search-wrap input {
+        height: 50px;
+        font-size: 13px;
+    }
+
+    .filter-chip {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .klinik-card {
+        padding: 16px;
+    }
+
+    .klinik-card-body {
+        flex-direction: column;
+    }
+
+    .klinik-thumb {
+        width: 46px;
+        height: 46px;
+    }
+
+    .klinik-aksi {
+        flex-direction: column;
+    }
+
+    .btn-hubungi,
+    .btn-maps {
+        width: 100%;
+    }
+}

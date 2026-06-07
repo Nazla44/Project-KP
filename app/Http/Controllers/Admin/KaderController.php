@@ -92,11 +92,17 @@ class KaderController extends Controller
             $token = Password::broker()->createToken($user);
         });
 
+        $setPasswordUrl = route('kader.password.edit', [
+            'token' => $token,
+            'email' => $user->email,
+        ]);
+
         Mail::to($user->email)->send(new KaderApprovedMail($kader->fresh(), $user, $token));
 
         return redirect()
             ->route('admin.kaders.show', $kader)
-            ->with('status', 'Kader berhasil disetujui. Email set password sudah dikirim.');
+            ->with('status', 'Kader berhasil disetujui. Link set password sudah dibuat.')
+            ->with('set_password_url', $setPasswordUrl);
     }
 
     public function reject(Request $request, Kader $kader): RedirectResponse

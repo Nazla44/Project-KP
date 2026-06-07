@@ -155,6 +155,18 @@
         }
     </script>
 
+    <script>
+        window.AppFlash = {
+            success: @json(session('success') ?? session('status')),
+            error: @json(session('error')),
+            warning: @json(session('warning')),
+            info: @json(session('info')),
+            validationErrors: @json($errors->any() ? $errors->all() : []),
+        };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/app-alerts.js') }}"></script>
     @stack('scripts')
 </body>
 

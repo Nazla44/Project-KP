@@ -6,31 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Menambahkan relasi opsional dari screening_sessions ke kegiatan_sosial.
-     *
-     * Nullable karena screening bisa dilakukan mandiri (tanpa event).
-     * Sesuai dokumen flow: "Sesi terikat event" vs "Sesi mandiri".
-     */
     public function up(): void
     {
-        Schema::table('screening_sessions', function (Blueprint $table) {
-            // Tambahkan setelah kolom kader_id (sesuaikan nama kolom existing)
-            $table->foreignId('kegiatan_id')
-                  ->nullable()
-                  ->after('id')
-                  ->constrained('kegiatan_sosial')
-                  ->onDelete('set null');
+        if (! Schema::hasColumn('screening_sessions', 'kegiatan_id')) {
+            Schema::table('screening_sessions', function (Blueprint $table) {
+                $table->foreignId('kegiatan_id')
+                    ->nullable()
+                    ->after('id')
+                    ->constrained('kegiatan_sosial')
+                    ->nullOnDelete();
 
-            $table->index('kegiatan_id');
-        });
+                $table->index('kegiatan_id');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('screening_sessions', function (Blueprint $table) {
-            $table->dropForeign(['kegiatan_id']);
-            $table->dropColumn('kegiatan_id');
-        });
+        if (Schema::hasColumn('screening_sessions', 'kegiatan_id')) {
+            Schema::table('screening_sessions', function (Blueprint $table) {
+                $table->dropForeign(['kegiatan_id']);
+                $table->dropIndex(['kegiatan_id']);
+                $table->dropColumn('kegiatan_id');
+            });
+        }
     }
 };

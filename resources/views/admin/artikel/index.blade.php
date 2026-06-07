@@ -569,7 +569,7 @@
 
                             <td>
                                 <div class="articles-actions">
-                                    <a href="{{ route('artikel.show', $article->id) }}" class="articles-icon-button"
+                                    <a href="{{ route('artikel.show', $article->slug) }}" class="articles-icon-button"
                                         title="Lihat artikel" target="_blank">
                                         <i class="bi bi-eye"></i>
                                     </a>
@@ -579,14 +579,19 @@
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
 
-                                    <form method="POST" action="{{ route('admin.articles.destroy', $article) }}"
-                                        onsubmit="return confirm('Hapus artikel ini?')">
+                                    <form
+                                        method="POST"
+                                        action="{{ route('admin.articles.destroy', $article) }}"
+                                        class="d-inline js-confirm-delete"
+                                        data-title="Hapus artikel?"
+                                        data-text="Artikel yang dihapus tidak dapat dikembalikan."
+                                        data-confirm="Ya, hapus"
+                                    >
                                         @csrf
                                         @method('DELETE')
 
-                                        <button type="submit" class="articles-icon-button articles-icon-button-danger"
-                                            title="Hapus artikel">
-                                            <i class="bi bi-trash3"></i>
+                                        <button type="submit" class="articles-icon-button articles-icon-button-danger border-0" title="Hapus artikel">
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -699,8 +704,15 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
 
-                    <form method="POST" action="{{ route('admin.articles.update', $article) }}"
-                        enctype="multipart/form-data">
+                    <form
+                        method="POST"
+                        action="{{ route('admin.articles.update', $article) }}"
+                        enctype="multipart/form-data"
+                        class="js-confirm-submit"
+                        data-title="Update artikel?"
+                        data-text="Perubahan artikel akan disimpan."
+                        data-confirm="Ya, update"
+                    >
                         @csrf
                         @method('PUT')
 
