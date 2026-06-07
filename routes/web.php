@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\KaderController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\KegiatanSosialController;
+use App\Http\Controllers\Admin\KegiatanSosialController as AdminKegiatanSosialController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest:web')->group(function () {
@@ -44,6 +46,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/articles/{artikel}', [ArtikelController::class, 'update'])->name('articles.update');
         Route::delete('/articles/{artikel}', [ArtikelController::class, 'destroy'])->name('articles.destroy');
 
+        Route::get('/kegiatan-sosial', [AdminKegiatanSosialController::class, 'index'])->name('kegiatan-sosial.index');
+        Route::get('/kegiatan-sosial/create', [AdminKegiatanSosialController::class, 'create'])->name('kegiatan-sosial.create');
+        Route::post('/kegiatan-sosial', [AdminKegiatanSosialController::class, 'store'])->name('kegiatan-sosial.store');
+        Route::get('/kegiatan-sosial/{kegiatan}', [AdminKegiatanSosialController::class, 'show'])->name('kegiatan-sosial.show');
+        Route::get('/kegiatan-sosial/{kegiatan}/edit', [AdminKegiatanSosialController::class, 'edit'])->name('kegiatan-sosial.edit');
+        Route::put('/kegiatan-sosial/{kegiatan}', [AdminKegiatanSosialController::class, 'update'])->name('kegiatan-sosial.update');
+        Route::delete('/kegiatan-sosial/{kegiatan}', [AdminKegiatanSosialController::class, 'destroy'])->name('kegiatan-sosial.destroy');
+        Route::patch('/kegiatan-sosial/{kegiatan}/status', [AdminKegiatanSosialController::class, 'updateStatus'])->name('kegiatan-sosial.update-status');
+
+        Route::post('/kegiatan-sosial/{kegiatan}/ringkasan', [AdminKegiatanSosialController::class, 'simpanRingkasan'])->name('kegiatan-sosial.ringkasan');
+        Route::post('/kegiatan-sosial/{kegiatan}/dokumentasi', [AdminKegiatanSosialController::class, 'uploadDokumentasi'])->name('kegiatan-sosial.upload-dokumentasi');
+        Route::delete('/kegiatan-sosial/dokumentasi/{dokumentasi}', [AdminKegiatanSosialController::class, 'deleteDokumentasi'])->name('kegiatan-sosial.delete-dokumentasi');
+
         Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     });
 });
@@ -59,6 +74,11 @@ Route::get('/akuntabilitas', [PageController::class, 'akuntabilitas'])->name('ac
 Route::get('/program-klinik', [PageController::class, 'programKlinik'])->name('program-klinik');
 Route::get('/klinik-terdekat', [PageController::class, 'klinikTerdekat'])->name('klinik-terdekat');
 Route::get('/program-komunitas', [PageController::class, 'programKomunitas'])->name('program-komunitas');
+Route::prefix('kegiatan-sosial')->name('kegiatan-sosial.')->group(function () {
+    Route::get('/', [KegiatanSosialController::class, 'index'])->name('index');
+    Route::get('/{slug}', [KegiatanSosialController::class, 'show'])->name('show');
+});
+
 Route::get('/berita', [PageController::class, 'berita'])->name('berita');
 Route::get('/berita/{slug}', [PageController::class, 'beritaDetail'])->name('berita.show');
 Route::get('/api/search', [PageController::class, 'searchApi'])->name('api.search');

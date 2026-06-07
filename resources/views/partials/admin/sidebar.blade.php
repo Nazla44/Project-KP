@@ -39,6 +39,12 @@
                 <i class="bi bi-hospital"></i>
                 <span>Klinik</span>
             </a>
+
+            <a href="{{ route('admin.kegiatan-sosial.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.kegiatan-sosial.*') ? 'active' : '' }}">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>Kegiatan Sosial</span>
+            </a>
         </nav>
     </div>
 

@@ -62,6 +62,12 @@ class Kader extends Model
         return $this->belongsTo(Klinik::class);
     }
 
+    public function kegiatan()
+    {
+        return $this->belongsToMany(KegiatanSosial::class, 'kegiatan_kader', 'kader_id', 'kegiatan_id')
+            ->withPivot('peran')->withTimestamps();
+    }
+
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
