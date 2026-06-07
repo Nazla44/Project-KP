@@ -543,3 +543,119 @@
   .fk-sukses-steps { flex-direction: column; }
   .fk-step-arrow { transform: rotate(90deg); }
 }
+
+/* =========================================================
+   FORM KADER
+========================================================= */
+
+.fk-region-combo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.fk-select {
+    appearance: auto;
+    cursor: pointer;
+}
+
+.fk-select:disabled {
+    background: #f8f8f8;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.fk-select option {
+    color: #1f2937;
+}
+
+/* =========================================================
+   FORM KADER 
+========================================================= */
+
+.fk-region-picker {
+  position: relative;
+}
+
+.fk-region-input-wrap {
+  position: relative;
+}
+
+.fk-region-input {
+  cursor: pointer;
+  padding-right: 52px;
+  background: #ffffff;
+}
+
+.fk-region-open-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.fk-region-panel {
+  display: none;
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}
+
+.fk-region-panel.show {
+  display: block;
+}
+
+.fk-region-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.fk-region-panel-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.fk-region-panel-hint {
+  display: block;
+  margin-top: 10px;
+  color: #777777;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.fk-select {
+  appearance: auto;
+  cursor: pointer;
+}
+
+.fk-select:disabled {
+  background: #f8f8f8;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.fk-select option {
+  color: #1f2937;
+}
+
+@media (max-width: 576px) {
+  .fk-region-panel-grid {
+    grid-template-columns: 1fr;
+  }
+}
