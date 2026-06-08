@@ -16,6 +16,8 @@ use App\Http\Controllers\Kader\AuthController as KaderAuthController;
 use App\Http\Controllers\Kader\DashboardController as KaderDashboardController;
 use App\Http\Controllers\Kader\ScreeningController as KaderScreeningController;
 use App\Http\Controllers\Kader\RiwayatScreeningController;
+use App\Http\Controllers\Kader\RekapSosialisasiController;
+use App\Http\Controllers\Admin\ReportController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -61,6 +63,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/kegiatan-sosial/{kegiatan}/dokumentasi', [AdminKegiatanSosialController::class, 'uploadDokumentasi'])->name('kegiatan-sosial.upload-dokumentasi');
         Route::delete('/kegiatan-sosial/dokumentasi/{dokumentasi}', [AdminKegiatanSosialController::class, 'deleteDokumentasi'])->name('kegiatan-sosial.delete-dokumentasi');
 
+        Route::get('/reports', [ReportController::class, 'overview'])
+            ->name('reports.overview');
+
+        Route::get('/reports/export', [ReportController::class, 'exportOverview'])
+            ->name('reports.overview.export');
+
         Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     });
 });
@@ -98,6 +106,15 @@ Route::prefix('kader')->name('kader.')->group(function () {
         Route::post('/kegiatan/{kegiatan}/screening', [KaderScreeningController::class, 'store'])->name('screening.store');
 
         Route::post('/screening-session/{session}/close', [KaderScreeningController::class, 'closeSession'])->name('screening.close');
+
+        Route::get('/rekap-sosialisasi', [RekapSosialisasiController::class, 'index'])
+            ->name('rekap-sosialisasi.index');
+
+        Route::get('/rekap-sosialisasi/{kegiatan}/edit', [RekapSosialisasiController::class, 'edit'])
+            ->name('rekap-sosialisasi.edit');
+
+        Route::put('/rekap-sosialisasi/{kegiatan}', [RekapSosialisasiController::class, 'update'])
+            ->name('rekap-sosialisasi.update');
     });
 });
 

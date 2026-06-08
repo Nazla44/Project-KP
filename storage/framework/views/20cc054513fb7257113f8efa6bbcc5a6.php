@@ -1,10 +1,8 @@
-@extends('layouts.kader')
+<?php $__env->startSection('title', 'Jadwal Sosialisasi'); ?>
 
-@section('title', 'Jadwal Sosialisasi')
+<?php $__env->startSection('page_title', 'Jadwal Sosialisasi'); ?>
 
-@section('page_title', 'Jadwal Sosialisasi')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="kader-page-header">
         <div>
             <p class="kader-page-label">Jadwal</p>
@@ -14,13 +12,13 @@
             </p>
         </div>
 
-        <a href="{{ route('kader.riwayat-jadwal.index') }}" class="kader-btn-light">
+        <a href="<?php echo e(route('kader.riwayat-jadwal.index')); ?>" class="kader-btn-light">
             <i class="bi bi-clock-history"></i>
             Riwayat Jadwal
         </a>
     </div>
 
-    @if($semuaKegiatan->count())
+    <?php if($semuaKegiatan->count()): ?>
         <div class="kader-table-card">
             <div class="kader-table-head">
                 <div>
@@ -44,60 +42,70 @@
                     </thead>
 
                     <tbody>
-                        @foreach($semuaKegiatan as $item)
+                        <?php $__currentLoopData = $semuaKegiatan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td>
-                                    <strong>{{ $item->judul }}</strong>
+                                    <strong><?php echo e($item->judul); ?></strong>
 
                                     <div class="text-muted small">
-                                        {{ \Illuminate\Support\Str::limit(strip_tags($item->deskripsi ?? '-'), 70) }}
+                                        <?php echo e(\Illuminate\Support\Str::limit(strip_tags($item->deskripsi ?? '-'), 70)); ?>
+
                                     </div>
                                 </td>
 
                                 <td>
-                                    {{ optional($item->tanggal)->format('d M Y') ?? '-' }}
+                                    <?php echo e(optional($item->tanggal)->format('d M Y') ?? '-'); ?>
 
-                                    @if($item->jam_mulai)
+
+                                    <?php if($item->jam_mulai): ?>
                                         <div class="text-muted small">
-                                            {{ substr($item->jam_mulai, 0, 5) }}
+                                            <?php echo e(substr($item->jam_mulai, 0, 5)); ?>
 
-                                            @if($item->jam_selesai)
-                                                - {{ substr($item->jam_selesai, 0, 5) }}
-                                            @endif
+
+                                            <?php if($item->jam_selesai): ?>
+                                                - <?php echo e(substr($item->jam_selesai, 0, 5)); ?>
+
+                                            <?php endif; ?>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
 
-                                <td>{{ $item->lokasi ?? '-' }}</td>
+                                <td><?php echo e($item->lokasi ?? '-'); ?></td>
 
                                 <td>
                                     <span class="kader-status-badge">
-                                        {{ $item->status_label ?? ucfirst($item->status ?? 'draft') }}
+                                        <?php echo e($item->status_label ?? ucfirst($item->status ?? 'draft')); ?>
+
                                     </span>
                                 </td>
 
                                 <td class="text-end">
-                                    <a href="{{ route('kader.kegiatan.show', $item) }}" class="kader-btn-light">
-                                        Detail
-                                    </a>
+                                    <div class="kader-action-group">
+                                        <a href="<?php echo e(route('kader.kegiatan.show', $item)); ?>" class="kader-action-button view"
+                                            title="Detail jadwal">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
 
-                                    <a href="{{ route('kader.screening.create', $item) }}" class="kader-btn-red">
-                                        Screening
-                                    </a>
+                                        <a href="<?php echo e(route('kader.screening.create', $item)); ?>"
+                                            class="kader-action-button screening" title="Mulai screening">
+                                            <i class="bi bi-clipboard2-pulse"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
 
-            @if(method_exists($semuaKegiatan, 'links'))
+            <?php if(method_exists($semuaKegiatan, 'links')): ?>
                 <div class="kader-pagination">
-                    {{ $semuaKegiatan->links() }}
+                    <?php echo e($semuaKegiatan->links()); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
-    @else
+    <?php else: ?>
         <div class="kader-empty-page">
             <div class="kader-empty-page-icon">
                 <i class="bi bi-calendar-event"></i>
@@ -132,16 +140,18 @@
             </div>
 
             <div class="kader-empty-actions">
-                <a href="{{ route('kader.dashboard') }}" class="kader-btn-red">
+                <a href="<?php echo e(route('kader.dashboard')); ?>" class="kader-btn-red">
                     <i class="bi bi-grid-1x2-fill"></i>
                     Kembali ke Dashboard
                 </a>
 
-                <a href="{{ route('kader.riwayat-jadwal.index') }}" class="kader-btn-light">
+                <a href="<?php echo e(route('kader.riwayat-jadwal.index')); ?>" class="kader-btn-light">
                     <i class="bi bi-clock-history"></i>
                     Lihat Riwayat Jadwal
                 </a>
             </div>
         </div>
-    @endif
-@endsection
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.kader', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Users/aureliadwiwi/Desktop/KP/STPI/Project-KP/resources/views/kader/jadwal.blade.php ENDPATH**/ ?>

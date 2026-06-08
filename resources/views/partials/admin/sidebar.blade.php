@@ -45,6 +45,13 @@
                 <i class="bi bi-calendar-event-fill"></i>
                 <span>Jadwal Sosialisasi</span>
             </a>
+
+            <a href="{{ route('admin.reports.overview') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                <i class="bi bi-bar-chart-fill"></i>
+                <span>laporan</span>
+            </a>
+
         </nav>
     </div>
 

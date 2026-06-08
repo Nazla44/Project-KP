@@ -35,7 +35,7 @@ body {
 
 .kader-auth-page {
     min-height: 100vh;
-    background: #f7f7f8;
+    background: #f6f7fb;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,6 +45,7 @@ body {
 .kader-auth-wrapper {
     width: 100%;
     max-width: 430px;
+    margin: 0 auto;
 }
 
 .kader-auth-logo {
@@ -52,7 +53,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 62px;
+    margin-bottom: 42px;
 }
 
 .kader-auth-logo-mark {
@@ -76,24 +77,34 @@ body {
     font-weight: 700;
 }
 
+.kader-auth-main-logo {
+    width: 132px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
 .kader-auth-card {
+    width: 100%;
+    min-height: auto;
     background: #ffffff;
-    border-radius: 18px;
-    border: 1px solid #eeeeee;
-    padding: 34px 32px 36px;
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.06);
+    border: 0;
+    border-radius: 20px;
+    padding: 42px 34px 36px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
 }
 
 .kader-auth-title {
     margin: 0 0 8px;
     text-align: center;
+    color: #172033;
     font-size: 28px;
     font-weight: 800;
-    color: #222222;
 }
 
 .kader-auth-subtitle {
-    margin: 0 0 30px;
+    max-width: 330px;
+    margin: 0 auto 30px;
     text-align: center;
     color: #6f6f6f;
     font-size: 15px;
@@ -111,14 +122,13 @@ body {
 .kader-auth-input {
     width: 100%;
     height: 52px;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 11px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
     padding: 0 16px;
-    font-size: 14px;
-    color: #1f1f1f;
     background: #ffffff;
+    color: #1f1f1f;
+    font-size: 14px;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .kader-auth-input::placeholder {
@@ -158,13 +168,10 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .kader-auth-button:hover {
     background: #c90009;
-    transform: translateY(-1px);
 }
 
 /* =========================================================
@@ -594,6 +601,14 @@ body {
 /* =========================================================
    BUTTONS / BADGES
 ========================================================= */
+.kader-status-badge,
+.history-screening-status,
+.history-screening-count,
+.risk-badge {
+    white-space: nowrap;
+    line-height: 1;
+    text-align: center;
+}
 
 .kader-btn-red,
 .kader-btn-light {
@@ -1051,7 +1066,7 @@ body {
 }
 
 .screening-web-check.checked .screening-web-check-box::before {
-    content: "✓";
+    content: "âœ“";
     color: #ffffff;
     font-size: 13px;
     font-weight: 900;
@@ -1316,6 +1331,7 @@ body {
 }
 
 @media (max-width: 768px) {
+
     .screening-form-grid.two,
     .screening-check-grid {
         grid-template-columns: 1fr;
@@ -1485,7 +1501,7 @@ body {
     font-weight: 900;
 }
 
-.kader-empty-page > p {
+.kader-empty-page>p {
     max-width: 640px;
     margin: 0 auto 28px;
     color: #64748b;
@@ -1571,29 +1587,337 @@ body {
 }
 
 /* =========================================================
-   KADER TABLE ACTION BUTTONS
+   KADER TABLE ACTION ICONS - LIKE ADMIN
 ========================================================= */
 
-.kader-table-actions {
+.kader-action-group {
     display: inline-flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    min-width: 210px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
 }
 
-.kader-table-actions .kader-btn-light,
-.kader-table-actions .kader-btn-red {
-    width: 100%;
-    min-height: 46px;
-    justify-content: center;
-    text-align: center;
+.kader-action-button {
+    width: 42px;
+    height: 42px;
     border-radius: 14px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s ease;
+}
+
+.kader-action-button.view {
+    background: rgba(59, 130, 246, 0.10);
+    color: #2563eb;
+}
+
+.kader-action-button.screening {
+    background: rgba(227, 0, 11, 0.10);
+    color: #e3000b;
+}
+
+.kader-action-button.edit {
+    background: rgba(245, 158, 11, 0.13);
+    color: #b45309;
+}
+
+.kader-action-button.delete {
+    background: rgba(220, 38, 38, 0.12);
+    color: #dc2626;
+}
+
+.kader-action-button:hover {
+    opacity: 0.86;
+    transform: translateY(-1px);
+    text-decoration: none;
 }
 
 @media (max-width: 768px) {
-    .kader-table-actions {
-        min-width: 100%;
+    .kader-action-group {
+        justify-content: flex-end;
+    }
+
+    .kader-action-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        font-size: 17px;
+    }
+}
+
+/* =========================================================
+   KADER RIWAYAT SCREENING - RESPONSIVE CARDS
+========================================================= */
+
+.history-schedule-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+.history-schedule-card {
+    width: 100%;
+    max-width: none;
+    min-height: 260px;
+    background: #ffffff;
+    border: 1px solid #eef1f6;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.history-schedule-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.history-schedule-card h2 {
+    margin: 0 0 18px;
+    color: #101827;
+    font-size: 21px;
+    font-weight: 900;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.history-schedule-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+    margin-bottom: 24px;
+}
+
+.history-schedule-meta p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.45;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.history-schedule-meta i {
+    color: #e3000b;
+    font-size: 15px;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+
+.history-schedule-actions {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.history-schedule-actions .kader-btn-red,
+.history-schedule-actions .kader-btn-light {
+    min-height: 42px;
+    border-radius: 12px;
+    padding: 10px 16px;
+    gap: 8px;
+}
+
+.kader-status-badge,
+.history-screening-count,
+.history-screening-status {
+    white-space: nowrap;
+    line-height: 1;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .history-schedule-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-schedule-card {
+        min-height: auto;
+        padding: 20px;
+    }
+
+    .history-schedule-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .history-schedule-top,
+    .history-schedule-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .history-schedule-actions .kader-btn-red,
+    .history-schedule-actions .kader-btn-light {
         width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .history-screening-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-screening-card {
+        min-height: auto;
+        padding: 20px;
+    }
+
+    .history-screening-card-top,
+    .history-screening-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .history-screening-actions .kader-btn-red,
+    .history-screening-actions .kader-btn-light {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   KADER REKAP SOSIALISASI
+========================================================= */
+
+.rekap-form {
+    padding: 22px;
+}
+
+.rekap-form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 22px;
+    align-items: start;
+}
+
+.rekap-section-title {
+    margin: 0 0 16px;
+    color: #101827;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.rekap-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.rekap-label span {
+    color: #e3000b;
+}
+
+.rekap-input,
+.rekap-textarea {
+    width: 100%;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 14px;
+    outline: none;
+}
+
+.rekap-input {
+    height: 48px;
+    padding: 0 14px;
+}
+
+.rekap-textarea {
+    min-height: 140px;
+    padding: 14px;
+    resize: vertical;
+}
+
+.rekap-input:focus,
+.rekap-textarea:focus {
+    border-color: #e3000b;
+    box-shadow: 0 0 0 3px rgba(227, 0, 11, 0.08);
+}
+
+.rekap-help {
+    margin: -6px 0 16px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.rekap-upload-list {
+    display: grid;
+    gap: 16px;
+}
+
+.rekap-upload-item {
+    border: 1px solid #eef1f6;
+    border-radius: 14px;
+    padding: 14px;
+    background: #f8fafc;
+}
+
+.rekap-summary-list {
+    display: grid;
+    gap: 12px;
+}
+
+.rekap-summary-list div {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eef1f6;
+}
+
+.rekap-summary-list div:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.rekap-summary-list span {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.rekap-summary-list strong {
+    display: block;
+    color: #111827;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.rekap-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.rekap-photo-grid img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 1199px) {
+    .rekap-form-grid {
+        grid-template-columns: 1fr;
     }
 }
